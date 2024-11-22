@@ -1,0 +1,84 @@
+package Final_Project;
+
+public abstract class User {
+	protected String name;
+	protected String trn;
+	protected String dob;
+	protected String address;
+	protected String contact_number ;
+	
+	// Default Constructor
+	public User()
+	{
+		name = "";
+		trn = "";
+		dob = "";
+		address = "";
+		contact_number = "";
+	}
+	
+	public User(String name, String trn, String dob, String address, String contact_number)
+	{
+		this.name = name;
+		this.trn = trn;
+		this.dob = dob;
+		this.address = address;
+		this.contact_number = contact_number;
+	}
+	
+	public User(User use)
+	{
+		name = use.name;
+		trn = use.trn;
+		dob = use.dob;
+		address = use.address;
+		contact_number = use.contact_number;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getTrn() {
+		return trn;
+	}
+
+	public void setTrn(String trn) {
+		this.trn = trn;
+	}
+
+	public String getDob() {
+		return dob;
+	}
+
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getContact_number() {
+		return contact_number;
+	}
+
+	public void setContact_number(String contact_number) {
+		this.contact_number = contact_number;
+	}
+	
+	@Override 
+	public String toString () {
+		return "User's name is: " + name + "User's Trn is:" + trn + "User's Date of Birth is: " + dob + "User's address is" + address + "The user's address is:" + address + "\n";} 
+
+	}
+	
+}
