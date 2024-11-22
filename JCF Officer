@@ -1,0 +1,51 @@
+package Final_Project;
+
+public class JCF_Officer extends User{
+	private String badgeNumber;
+	private String PoliceStation;
+	private Ticket currentTickets;
+	
+	// Primary Constructor 
+public JCF_Officer(String name, String trn, String dob, String address, String contact_number,String badgeNumber,String PoliceStation, Ticket currentTickets)
+{
+	super(name,trn,dob,address,contact_number);
+	this.badgeNumber = badgeNumber;
+	this.PoliceStation = PoliceStation;
+	this.currentTickets = currentTickets;
+}
+
+public JCF_Officer(JCF_Officer JCF)
+{
+	super(JCF);
+	badgeNumber = JCF.badgeNumber;
+	PoliceStation = JCF.PoliceStation;
+	currentTickets = JCF.currentTickets;
+}
+
+public String getBadgeNumber() {
+	return badgeNumber;
+}
+
+public void setBadgeNumber(String badgeNumber) {
+	this.badgeNumber = badgeNumber;
+}
+
+public String getPoliceStation() {
+	return PoliceStation;
+}
+
+public void setPoliceStation(String policeStation) {
+	PoliceStation = policeStation;
+}
+
+public Ticket getCurrentTickets() {
+	return currentTickets;
+}
+
+public void setCurrentTickets(Ticket currentTickets) {
+	this.currentTickets = currentTickets;
+}
+
+@Override 
+public String toString () {
+	return "JCF's Officer Badge Number is: " + badgeNumber + "JCF's Officer Police Station is :" + PoliceStation + "The number of ticket/s are:" + currentTickets + "\n";} 
