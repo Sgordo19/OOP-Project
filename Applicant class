@@ -1,0 +1,63 @@
+package Final_Project;
+
+public class Applicant extends User{
+	private String email;
+	private Ticket ticket;
+	private Boolean accidents;
+	private Boolean negativePoliceRecords;
+	
+	// Primary Constructor
+public Applicant(String name, String trn, String dob, String address, String contact_number, String email, Ticket ticket, Boolean accidents, Boolean negativePoliceRecords)
+{
+	super(name,trn,dob,address,contact_number);
+	this.email = email;
+	this.ticket = ticket;
+	this.accidents = accidents;
+	this.negativePoliceRecords = negativePoliceRecords; 
+}
+
+public Applicant( Applicant app)
+{
+	super(app);
+	email = app.email;
+	ticket = app.ticket;
+	accidents = app.accidents;
+	negativePoliceRecords = app.negativePoliceRecords;
+}
+
+public String getEmail() {
+	return email;
+}
+
+public void setEmail(String email) {
+	this.email = email;
+}
+
+public Ticket getTicket() {
+	return ticket;
+}
+
+public void setTicket(Ticket ticket) {
+	this.ticket = ticket;
+}
+
+public Boolean getAccidents() {
+	return accidents;
+}
+
+public void setAccidents(Boolean accidents) {
+	this.accidents = accidents;
+}
+
+public Boolean getNegativePoliceRecords() {
+	return negativePoliceRecords;
+}
+
+public void setNegativePoliceRecords(Boolean negativePoliceRecords) {
+	this.negativePoliceRecords = negativePoliceRecords;
+}
+
+@Override 
+public String toString () {
+	return "User's email is: " + email + "Number of ticket/s are:" + ticket + "Has the User met in any accidents?: " + accidents+ "What is the User's accident Reccord" + negativePoliceRecords +"\n";} 
+}
