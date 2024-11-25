@@ -1,0 +1,32 @@
+package Final_Project;
+
+public class Processing_Officer extends User{
+	private String officerID;
+
+	private Processing_Officer (String name, String trn, String dob, String address, String contact_number, String officerID)
+	{
+		super(name,trn,dob,address,contact_number);
+		this.officerID = officerID;
+	}
+	
+	private Processing_Officer (Processing_Officer pro)
+	{
+		super (pro);
+		officerID = pro.officerID;
+	}
+
+	public String getOfficerID() {
+		return officerID;
+	}
+
+	public void setOfficerID(String officerID) {
+		this.officerID = officerID;
+	}
+	
+	// Methods 
+	 
+	
+	@Override 
+	public String toString () {
+		return "The Officer's ID is :" + officerID+ "\n";} 
+}
