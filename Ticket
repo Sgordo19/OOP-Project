@@ -1,0 +1,108 @@
+package Final_Project;
+
+public class Ticket {
+	private String ticketnumber ;
+	private Date issuedate;
+	private String offencecode;
+	private String offencedescription;
+	private float fineamount;
+	private String vehiclePlateNumber;
+	private Driver driver;
+	private JCF_Officer officer;
+	
+	public Ticket(String ticketnumber, Date issuedate, String offencecode, String offencedescription, float fineamount, String vehiclePlateNumber, Driver driver, JCF_Officer officer)
+	{
+		this.ticketnumber = ticketnumber;
+		this.issuedate = issuedate;
+		this.offencecode = offencecode;
+		this.offencedescription = offencedescription;
+		this.fineamount = fineamount;
+		this.vehiclePlateNumber = vehiclePlateNumber;
+		this.driver = driver;
+		this.officer = officer;
+	}
+	
+	public Ticket( Ticket tic)
+	{
+		ticketnumber = tic.ticketnumber;
+		issuedate = tic.issuedate;
+		offencecode = tic.offencecode;
+		offencedescription = tic.offencedescription;
+		fineamount = tic.fineamount;
+		vehiclePlateNumber = tic.vehiclePlateNumber;
+		driver = tic.driver;
+		officer = tic.officer;
+	}
+
+
+	
+	public String getTicketnumber() {
+		return ticketnumber;
+	}
+
+	public void setTicketnumber(String ticketnumber) {
+		this.ticketnumber = ticketnumber;
+	}
+
+	public Date getIssuedate() {
+		return issuedate;
+	}
+
+	public void setIssuedate(Date issuedate) {
+		this.issuedate = issuedate;
+	}
+
+	public String getOffencecode() {
+		return offencecode;
+	}
+
+	public void setOffencecode(String offencecode) {
+		this.offencecode = offencecode;
+	}
+
+	public String getOffencedescription() {
+		return offencedescription;
+	}
+
+	public void setOffencedescription(String offencedescription) {
+		this.offencedescription = offencedescription;
+	}
+
+	public float getFineamount() {
+		return fineamount;
+	}
+
+	public void setFineamount(float fineamount) {
+		this.fineamount = fineamount;
+	}
+
+	public String getVehiclePlateNumber() {
+		return vehiclePlateNumber;
+	}
+
+	public void setVehiclePlateNumber(String vehiclePlateNumber) {
+		this.vehiclePlateNumber = vehiclePlateNumber;
+	}
+
+	public Driver getDriver() {
+		return driver;
+	}
+
+	public void setDriver(Driver driver) {
+		this.driver = driver;
+	}
+
+	public JCF_Officer getOfficer() {
+		return officer;
+	}
+
+	public void setOfficer(JCF_Officer officer) {
+		this.officer = officer;
+	}
+
+	@Override 
+	public String toString () {
+		return "Ticket Number: " + ticketnumber + "Issue Date:" +  issuedate + "Offence Code:" +  offencecode + 
+			   "The Offence Description: " +  offencedescription + "Fineamount: " + fineamount+ "The Vehicle Plate Number :" + vehiclePlateNumber +
+			   "The Driver is: " + driver + "The officer is: " +officer+"\n";} 	
+}
