@@ -1,0 +1,24 @@
+package Final_Project;
+
+public class Driver extends User {
+	private Ticket outstandingTickets;
+	private boolean Warrants;
+	
+	private Driver (String name, String trn, String dob, String address, String contact_number , float FineAmount, String FineType, String Finedescription, Ticket outstandingTickets, boolean Warrants)
+	{
+		super(name,trn,dob,address,contact_number);
+		this.outstandingTickets = outstandingTickets;
+		this.Warrants = Warrants;
+	}
+	
+	private Driver (Driver Driv)
+	{
+		super(Driv);
+		outstandingTickets = Driv.outstandingTickets;
+		Warrants = Driv.Warrants;
+	}
+	
+	@Override 
+	public String toString () {
+		return "The outsatnding Tickets are :" + outstandingTickets + "Warrants?" + Warrants +  "\n";} 
+	}
