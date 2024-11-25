@@ -1,0 +1,49 @@
+package Final_Project;
+
+public class Accident {
+	private Date accidentDate;
+	private String location;
+	private String severity;
+
+	public Accident (Date accidentDate, String location, String severity)
+	{
+		this.accidentDate = accidentDate;
+		this.location = location;
+		this.severity = severity;
+	}
+	
+	public Accident( Accident acc)
+	{
+		accidentDate = acc.accidentDate;
+		location = acc.location;
+		severity = acc.severity;
+	}
+
+	public Date getAccidentDate() {
+		return accidentDate;
+	}
+
+	public void setAccidentDate(Date accidentDate) {
+		this.accidentDate = accidentDate;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getSeverity() {
+		return severity;
+	}
+
+	public void setSeverity(String severity) {
+		this.severity = severity;
+	}
+
+	@Override 
+	public String toString () {
+		return "Accident Date :" + accidentDate + "The location is:" + location + "The Severity of the situation: " + severity + "\n";}
+}
