@@ -1,0 +1,28 @@
+package Final_Project;
+
+public class PoliceRecord {
+	private String criminalHistory;
+	
+	public PoliceRecord(String criminalHistory)
+	{
+		this.criminalHistory = criminalHistory;
+	}
+	
+	public PoliceRecord(PoliceRecord PR)
+	{
+		criminalHistory = PR.criminalHistory;
+	}
+
+	public String getCriminalHistory() {
+		return criminalHistory;
+	}
+
+	public void setCriminalHistory(String criminalHistory) {
+		this.criminalHistory = criminalHistory;
+	}
+	
+	@Override 
+	public String toString () {
+		return "Criminal History:" + criminalHistory + "\n";
+		} 
+}
