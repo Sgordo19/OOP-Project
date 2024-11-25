@@ -1,0 +1,49 @@
+package Final_Project;
+
+public class Fine {
+	private float FineAmount;
+	private String FineType;
+	private String Finedescription;
+	
+	public Fine (float FineAmount, String FineType, String Finedescription)
+	{
+		this.FineAmount = FineAmount;
+		this.FineType = FineType;
+		this.Finedescription = Finedescription;
+	}
+	
+	public Fine( Fine Fin)
+	{
+		FineAmount = Fin.FineAmount;
+		FineType = Fin.FineType;
+		Finedescription = Fin.Finedescription;		
+	}
+
+	public float getFineAmount() {
+		return FineAmount;
+	}
+
+	public void setFineAmount(float fineAmount) {
+		FineAmount = fineAmount;
+	}
+
+	public String getFineType() {
+		return FineType;
+	}
+
+	public void setFineType(String fineType) {
+		FineType = fineType;
+	}
+
+	public String getFinedescription() {
+		return Finedescription;
+	}
+
+	public void setFinedescription(String finedescription) {
+		Finedescription = finedescription;
+	}
+
+	@Override 
+	public String toString () {
+		return "The Fine Amount :" + FineAmount + "The Fine Type :" + FineType+ "The Fine Description: " + Finedescription + "\n";} 
+}
