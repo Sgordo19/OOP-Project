@@ -24,8 +24,50 @@ public class Processing_Officer extends User{
 	}
 	
 	// Methods 
-	 
-	
+	 public void createApplication() 
+	{
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Creating a new application...");
+        // Logic can include entering applicant's details, validating information, etc.
+    	}
+
+ 	public void updateApplication() 
+	{
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Updating application...");
+        // Logic can include modifying existing applicant details
+    	}
+	public void deleteApplication() 
+	{
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Deleting application...");
+        // Placeholder for deleting an application
+        // Logic can include confirming the deletion, searching for the application to delete
+   	 }
+
+    	// Method to reject an application
+   	public boolean rejectApplication() 
+	{
+        // For now, we simply return true (assuming rejection is always successful)
+        System.out.println("Application rejected.");
+        return true;
+    	}
+
+    	// Method to approve an application
+   	 public boolean approveApplication() 
+	{
+        // For now, we simply return true (assuming approval is always successful)
+        System.out.println("Application approved.");
+        return true;
+    	}
+
+    	// Method to check the ticket status 
+   	 public void checkTicketStatus() 
+	{
+        // Logic can involve checking for outstanding tickets for an applicant
+        System.out.println("Checking ticket status...");
+    	}
+
 	@Override 
 	public String toString () {
 		return "The Officer's ID is :" + officerID+ "\n";} 
