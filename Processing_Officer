@@ -24,49 +24,71 @@ public class Processing_Officer extends User{
 	}
 	
 	// Methods 
-	 public void createApplication() 
+	
+    // Create Application
+    public void createApplication(String applicationID, Application application) 
 	{
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Creating a new application...");
-        // Logic can include entering applicant's details, validating information, etc.
+        if (applications.get(applicationID) != null) {
+            System.out.println("Application with ID " + applicationID + " already exists.");
+        } else {
+            applications.put(applicationID, application);
+            System.out.println("Application with ID " + applicationID + " has been created.");
+        }
     	}
 
- 	public void updateApplication() 
+    // Update Application
+    public void updateApplication(String applicationID, Application updatedApplication) 
 	{
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Updating application...");
-        // Logic can include modifying existing applicant details
-    	}
-	public void deleteApplication() 
-	{
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Deleting application...")
-        // Logic can include confirming the deletion, searching for the application to delete
-   	 }
-
-    	// Method to reject an application
-   	public boolean rejectApplication() 
-	{
-        // For now, we simply return true (assuming rejection is always successful)
-        System.out.println("Application rejected.");
-        return true;
+        if (applications.get(applicationID) == null) {
+            System.out.println("Application with ID " + applicationID + " does not exist.");
+        } else {
+            applications.put(applicationID, updatedApplication);
+            System.out.println("Application with ID " + applicationID + " has been updated.");
+        }
     	}
 
-    	// Method to approve an application
-   	 public boolean approveApplication() 
+    // Delete Application
+    public void deleteApplication(String applicationID) 
 	{
-        // For now, we simply return true (assuming approval is always successful)
-        System.out.println("Application approved.");
-        return true;
+        if (applications.remove(applicationID) != null) {
+            System.out.println("Application with ID " + applicationID + " has been deleted.");
+        } else {
+            System.out.println("Application with ID " + applicationID + " not found.");
+        }
     	}
 
-    	// Method to check the ticket status 
-   	 public void checkTicketStatus() 
+    // Reject Application
+    public boolean rejectApplication(String applicationID) 
 	{
-        // Logic can involve checking for outstanding tickets for an applicant
-        System.out.println("Checking ticket status...");
+        Application application = applications.get(applicationID);
+        if (application != null) {
+            application.setStatus("Rejected");
+            System.out.println("Application with ID " + applicationID + " has been rejected.");
+            return true;
+        } else {
+            System.out.println("Application with ID " + applicationID + " not found.");
+            return false;
+        }
     	}
 
+    // Approve Application
+    public boolean approveApplication(String applicationID) 
+	{
+        Application application = applications.get(applicationID);
+        if (application != null) {
+            if (application.isEligibleForApproval()) {
+                application.setStatus("Approved");
+                System.out.println("Application with ID " + applicationID + " has been approved.");
+                return true;
+            } else {
+                System.out.println("Application with ID " + applicationID + " does not meet the criteria for approval.");
+                return false;
+            }
+        } else {
+            System.out.println("Application with ID " + applicationID + " not found.");
+            return false;
+        }
+    	}
 	@Override 
 	public String toString () {
 		return "The Officer's ID is :" + officerID+ "\n";} 
