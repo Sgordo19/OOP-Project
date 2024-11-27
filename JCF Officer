@@ -1,51 +1,172 @@
-package Final_Project;
+import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
+import java.io.*;
 
-public class JCF_Officer extends User{
-	private String badgeNumber;
-	private String PoliceStation;
-	private Ticket currentTickets;
-	
-	// Primary Constructor 
-public JCF_Officer(String name, String trn, String dob, String address, String contact_number,String badgeNumber,String PoliceStation, Ticket currentTickets)
-{
-	super(name,trn,dob,address,contact_number);
-	this.badgeNumber = badgeNumber;
-	this.PoliceStation = PoliceStation;
-	this.currentTickets = currentTickets;
+public class JCF_Officer extends User {
+    private String badgeNumber;
+    private String policeStation;
+    private List<Ticket> currentTickets;
+
+    // Constructor
+    public JCF_Officer(String name, String trn, String dob, String address, String contact_number, String badgeNumber, String policeStation, List<Ticket> currentTickets)
+    {
+        super(name, trn, dob, address, contact_number);
+        this.badgeNumber = badgeNumber;
+        this.policeStation = policeStation;
+        this.currentTickets = currentTickets;
+    }
+
+    // Prompt user and add a new ticket
+    public void promptAndAddNewTicket() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter Ticket Number:");
+        String ticketNumber = scanner.nextLine();  // Read the ticket number
+
+        System.out.println("Enter Offence Code:");
+        String offenceCode = scanner.nextLine();  // Read the offence code
+
+        System.out.println("Enter Offence Description:");
+        String offenceDescription = scanner.nextLine();  // Read the offence description
+
+        System.out.println("Enter Fine Amount:");
+        double fineAmount = scanner.nextDouble();  // Read fine amount
+
+        scanner.nextLine();  // Consume newline
+
+        System.out.println("Enter Vehicle Plate Number:");
+        String vehiclePlateNumber = scanner.nextLine();  // Read vehicle plate number
+
+        //(String name, String trn, String dob, String address, String contact_number , float FineAmount, String FineType, String Finedescription, Ticket outstandingTickets, boolean Warrants)
+        // Create a new Driver and Officer objects (For simplicity, we're using placeholder data for now)
+        Driver driver = new Driver("Bobby Clarke", "TRN123", "01-01-1990", "Address", "555-5678", 15000, "Speeding", "Driver was speeding on Highway","N/A", "False");  // Example Driver
+        JCF_Officer officer = this;  // The officer who is issuing the ticket
+
+        // Create the new ticket with current date
+        Ticket ticket = new Ticket(ticketNumber, new java.util.Date(), offenceCode, offenceDescription, fineAmount, vehiclePlateNumber, driver, officer);
+
+        // Add the ticket to the list
+        currentTickets.add(ticket);
+        
+        // Write to file after adding the ticket
+        writeTicketsToFile();
+        System.out.println("Ticket Added Successfully!");
+    }
+
+    // Method to write the current tickets to a file (for persistence)
+    private void writeTicketsToFile() {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("tickets.dat"))) {
+            out.writeObject(currentTickets);
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+
+    // Method to read tickets from file
+    public void readTicketsFromFile() {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("tickets.dat"))) {
+            currentTickets = (List<Ticket>) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error reading from file: " + e.getMessage());
+        }
+    }
+    
+    // Get Ticket Method
+    public String getTicketNumber() {
+        return this.Ticket;
+    }
+
+
+    // Prompt user to view a specific ticket
+    public void promptAndRetrieveTicket() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the ticket number to retrieve:");
+        String ticketNumber = scanner.nextLine();  // Read the ticket number to retrieve
+
+        Ticket ticket = getTicketByNumber(ticketNumber);
+
+        if (ticket != null) {
+            System.out.println("Ticket retrieved: " + ticket);
+        } else {
+            System.out.println("Ticket not found.");
+        }
+    }
+
+    // Find a ticket by ticket number
+    private Ticket getTicketByNumber(String ticketNumber) {
+        for (Ticket ticket : currentTickets) {
+            if (ticket.getTicketNumber().equals(ticketNumber)) {
+                return ticket;
+            }
+        }
+        return null;
+    }
+
+    // Prompt user to delete a specific ticket
+    public void promptAndDeleteTicket() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the ticket number to delete:");
+        String ticketNumber = scanner.nextLine();  // Read the ticket number to delete
+
+        boolean success = deleteTicket(ticketNumber);  // Try deleting the ticket
+
+        if (success) {
+            System.out.println("Ticket deleted successfully.");
+        } else {
+            System.out.println("Ticket not found.");
+        }
+    }
+
+    // Delete a ticket from the list by ticket number
+    private boolean deleteTicket(String ticketNumber) {
+        Ticket ticket = getTicketByNumber(ticketNumber);
+        if (ticket != null) {
+            currentTickets.remove(ticket);
+            writeTicketsToFile();  // Update the file after deletion
+            return true;
+        }
+        return false;
+    }
+
+    // Main Menu to interact with the officer
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Create a JCF_Officer instance (with a maximum of 10 tickets for simplicity)
+        JCF_Officer officer = new JCF_Officer("John Doe", "TRN12345", "01-01-1980", "123 Main St", "555-1234", "B123", "Kingston", new ArrayList<>());
+
+        // Read the tickets from the file if available
+        officer.readTicketsFromFile();
+
+        // Simple menu for interacting with the officer
+        while (true) {
+            System.out.println("\n--- Menu ---");
+            System.out.println("1. Add New Ticket");
+            System.out.println("2. Retrieve Ticket");
+            System.out.println("3. Delete Ticket");
+            System.out.println("4. Exit");
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
+
+            switch (choice) {
+                case 1:
+                    officer.promptAndAddNewTicket();
+                    break;
+                case 2:
+                    officer.promptAndRetrieveTicket();
+                    break;
+                case 3:
+                    officer.promptAndDeleteTicket();
+                    break;
+                case 4:
+                    System.out.println("Exiting...");
+                    return;
+                default:
+                    System.out.println("Invalid choice, please try again.");
+            }
+        }
+    }
 }
-
-public JCF_Officer(JCF_Officer JCF)
-{
-	super(JCF);
-	badgeNumber = JCF.badgeNumber;
-	PoliceStation = JCF.PoliceStation;
-	currentTickets = JCF.currentTickets;
-}
-
-public String getBadgeNumber() {
-	return badgeNumber;
-}
-
-public void setBadgeNumber(String badgeNumber) {
-	this.badgeNumber = badgeNumber;
-}
-
-public String getPoliceStation() {
-	return PoliceStation;
-}
-
-public void setPoliceStation(String policeStation) {
-	PoliceStation = policeStation;
-}
-
-public Ticket getCurrentTickets() {
-	return currentTickets;
-}
-
-public void setCurrentTickets(Ticket currentTickets) {
-	this.currentTickets = currentTickets;
-}
-
-@Override 
-public String toString () {
-	return "JCF's Officer Badge Number is: " + badgeNumber + "JCF's Officer Police Station is :" + PoliceStation + "The number of ticket/s are:" + currentTickets + "\n";} 
