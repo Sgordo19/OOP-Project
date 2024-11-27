@@ -28,9 +28,11 @@ public class Processing_Officer extends User{
     // Create Application
     public void createApplication(String applicationID, Application application) 
 	{
-        if (applications.get(applicationID) != null) {
+        if (applications.get(applicationID) != null) 
+	{
             System.out.println("Application with ID " + applicationID + " already exists.");
-        } else {
+        } else 
+	{
             applications.put(applicationID, application);
             System.out.println("Application with ID " + applicationID + " has been created.");
         }
@@ -39,9 +41,11 @@ public class Processing_Officer extends User{
     // Update Application
     public void updateApplication(String applicationID, Application updatedApplication) 
 	{
-        if (applications.get(applicationID) == null) {
+        if (applications.get(applicationID) == null)
+	{
             System.out.println("Application with ID " + applicationID + " does not exist.");
-        } else {
+        } else 
+	{
             applications.put(applicationID, updatedApplication);
             System.out.println("Application with ID " + applicationID + " has been updated.");
         }
@@ -50,9 +54,11 @@ public class Processing_Officer extends User{
     // Delete Application
     public void deleteApplication(String applicationID) 
 	{
-        if (applications.remove(applicationID) != null) {
+        if (applications.remove(applicationID) != null) 
+	{
             System.out.println("Application with ID " + applicationID + " has been deleted.");
-        } else {
+        } else 
+	{
             System.out.println("Application with ID " + applicationID + " not found.");
         }
     	}
@@ -61,11 +67,13 @@ public class Processing_Officer extends User{
     public boolean rejectApplication(String applicationID) 
 	{
         Application application = applications.get(applicationID);
-        if (application != null) {
+        if (application != null)
+	{
             application.setStatus("Rejected");
             System.out.println("Application with ID " + applicationID + " has been rejected.");
             return true;
-        } else {
+        } else 
+	{
             System.out.println("Application with ID " + applicationID + " not found.");
             return false;
         }
