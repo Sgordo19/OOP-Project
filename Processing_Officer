@@ -40,8 +40,7 @@ public class Processing_Officer extends User{
 	public void deleteApplication() 
 	{
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Deleting application...");
-        // Placeholder for deleting an application
+        System.out.println("Deleting application...")
         // Logic can include confirming the deletion, searching for the application to delete
    	 }
 
