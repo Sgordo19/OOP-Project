@@ -103,9 +103,59 @@ public class Main {
 
                 break;
 
-                case 2: //Update Application
-                    System.out.println("Updating application...");
-                    // Incomplete
+                  case 2:
+                        // Update Applicant
+                    public void updateApplicant(String trn, Applicant updatedApplicant) {
+                    if (applicant.get(trn) == null) {
+                        System.out.println("Applicant with TRN " + trn + " does not exist.");
+                        } else 
+                        {
+                        applicant.put(trn, updatedApplicant);
+                        System.out.println("Applicant with TRN " + trn + " has been updated.");
+                        }
+                        }
+
+                   case 3: // Delete Applicant
+                    public void deleteApplicant(String trn) {
+                        if (applicants.remove(trn) != null) {
+                    System.out.println("Applicant with TRN " + trn + " has been deleted.");
+                        } else {
+                    System.out.println("Applicant with TRN " + trn + " not found.");
+                }
+                }
+
+                case 4:
+                // Reject Applicant
+                public boolean rejectApplicant(String trn) {
+                Applicant applicant = applicants.get(trn);
+                if (applicant != null) {
+                applicant.setStatus("Rejected");
+                System.out.println("Applicant with TRN " + trn + " has been rejected.");
+                return true;
+                } else {
+                System.out.println("Applicant with TRN " + trn + " not found.");
+                return false;
+            }
+        }
+
+                case 5:// Approve Applicant
+                public boolean approveApplicant(String trn) {
+            Applicant applicant = applicants.get(trn);
+            if (applicant != null) {
+            if (applicant.isEligibleForApproval()) {
+                applicant.setStatus("Approved");
+                System.out.println("Applicant with TRN " + trn + " has been approved.");
+                return true;
+            } else {
+                System.out.println("Applicant with TRN " + trn + " does not meet the criteria for approval.");
+                return false;
+                }
+            } else {
+            System.out.println("Applicant with TRN " + trn + " not found.");
+            return false;
+            }
+        }
+
                     break;
                     
         
