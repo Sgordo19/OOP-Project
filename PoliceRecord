@@ -1,28 +1,103 @@
 package Final_Project;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PoliceRecord {
-	private String criminalHistory;
-	
-	public PoliceRecord(String criminalHistory)
-	{
-		this.criminalHistory = criminalHistory;
-	}
-	
-	public PoliceRecord(PoliceRecord PR)
-	{
-		criminalHistory = PR.criminalHistory;
-	}
+    private String offenderName;
+    private String offenderTRN;
+    private String offenderAddress;
+    private String offenderContactNumber;
+    private List<Ticket> outstandingTickets;
+    private List<Accident> accidentHistory;
 
-	public String getCriminalHistory() {
-		return criminalHistory;
-	}
+    // Constructor
+    public PoliceRecord(String offenderName, String offenderTRN, String offenderAddress, String offenderContactNumber) {
+        this.offenderName = offenderName;
+        this.offenderTRN = offenderTRN;
+        this.offenderAddress = offenderAddress;
+        this.offenderContactNumber = offenderContactNumber;
+        this.outstandingTickets = new ArrayList<>();
+        this.accidentHistory = new ArrayList<>();
+    }
 
-	public void setCriminalHistory(String criminalHistory) {
-		this.criminalHistory = criminalHistory;
-	}
-	
-	@Override 
-	public String toString () {
-		return "Criminal History:" + criminalHistory + "\n";
-		} 
+    // Getters and Setters
+    public String getOffenderName() {
+        return offenderName;
+    }
+
+    public void setOffenderName(String offenderName) {
+        this.offenderName = offenderName;
+    }
+
+    public String getOffenderTRN() {
+        return offenderTRN;
+    }
+
+    public void setOffenderTRN(String offenderTRN) {
+        this.offenderTRN = offenderTRN;
+    }
+
+    public String getOffenderAddress() {
+        return offenderAddress;
+    }
+
+    public void setOffenderAddress(String offenderAddress) {
+        this.offenderAddress = offenderAddress;
+    }
+
+    public String getOffenderContactNumber() {
+        return offenderContactNumber;
+    }
+
+    public void setOffenderContactNumber(String offenderContactNumber) {
+        this.offenderContactNumber = offenderContactNumber;
+    }
+
+    // Methods to manage tickets
+    public void addTicket(Ticket ticket) {
+        outstandingTickets.add(ticket);
+    }
+
+    public List<Ticket> getOutstandingTickets() {
+        return outstandingTickets;
+    }
+
+    public void removeTicket(Ticket ticket) {
+        outstandingTickets.remove(ticket);
+    }
+
+    // Methods to manage accident history
+    public void addAccident(Accident accident) {
+        accidentHistory.add(accident);
+    }
+
+    public List<Accident> getAccidentHistory() {
+        return accidentHistory;
+    }
+
+    public boolean hasAccidentInLastTwoYears() {
+        // Check if the offender has an accident within the last two years
+        for (Accident accident : accidentHistory) {
+            if (accident.isWithinLastTwoYears()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Utility Method to check outstanding tickets
+    public boolean hasOutstandingTickets() {
+        return !outstandingTickets.isEmpty();
+    }
+
+    // Override toString method for a detailed report
+    @Override
+    public String toString() {
+        return "Offender: " + offenderName + "\n" +
+               "TRN: " + offenderTRN + "\n" +
+               "Address: " + offenderAddress + "\n" +
+               "Contact: " + offenderContactNumber + "\n" +
+               "Outstanding Tickets: " + outstandingTickets.size() + "\n" +
+               "Accident History: " + accidentHistory.size();
+    }
 }
