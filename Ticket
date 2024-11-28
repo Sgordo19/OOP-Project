@@ -1,93 +1,111 @@
 package Final_Project;
 
-public class Applicant extends User {
-    private String email;
-    private Ticket ticket;
-    private Boolean accidents;
-    private Boolean negativePoliceRecords;
+import java.util.Date;
 
-    // Primary Constructor
-    public Applicant(String name, String trn, String dob, String address, String contact_number, String email, Ticket ticket, Boolean accidents, Boolean negativePoliceRecords) {
-        super(name, trn, dob, address, contact_number);
-        this.email = email;
-        this.ticket = ticket;
-        this.accidents = accidents;
-        this.negativePoliceRecords = negativePoliceRecords;
+public class Ticket {
+    private String ticketnumber;
+    private Date issuedate;
+    private String offencecode;
+    private String offencedescription;
+    private float fineamount;
+    private String vehiclePlateNumber;
+    private Driver driver;
+    private JCF_Officer officer;
+
+    // Constructor
+    public Ticket(String ticketnumber, Date issuedate, String offencecode, String offencedescription, float fineamount, String vehiclePlateNumber, Driver driver, JCF_Officer officer) {
+        this.ticketnumber = ticketnumber;
+        this.issuedate = issuedate;
+        this.offencecode = offencecode;
+        this.offencedescription = offencedescription;
+        this.fineamount = fineamount;
+        this.vehiclePlateNumber = vehiclePlateNumber;
+        this.driver = driver;
+        this.officer = officer;
     }
 
-    public Applicant(Applicant app) {
-        super(app);
-        email = app.email;
-        ticket = app.ticket;
-        accidents = app.accidents;
-        negativePoliceRecords = app.negativePoliceRecords;
+    // Copy constructor
+    public Ticket(Ticket tic) {
+        ticketnumber = tic.ticketnumber;
+        issuedate = tic.issuedate;
+        offencecode = tic.offencecode;
+        offencedescription = tic.offencedescription;
+        fineamount = tic.fineamount;
+        vehiclePlateNumber = tic.vehiclePlateNumber;
+        driver = tic.driver;
+        officer = tic.officer;
     }
 
-    // Getters and Setters
-    public String getEmail() {
-        return email;
+    // Getter and setter methods
+    public String getTicketnumber() {
+        return ticketnumber;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setTicketnumber(String ticketnumber) {
+        this.ticketnumber = ticketnumber;
     }
 
-    public Ticket getTicket() {
-        return ticket;
+    public Date getIssuedate() {
+        return issuedate;
     }
 
-    public void setTicket(Ticket ticket) {
-        this.ticket = ticket;
+    public void setIssuedate(Date issuedate) {
+        this.issuedate = issuedate;
     }
 
-    public Boolean getAccidents() {
-        return accidents;
+    public String getOffencecode() {
+        return offencecode;
     }
 
-    public void setAccidents(Boolean accidents) {
-        this.accidents = accidents;
+    public void setOffencecode(String offencecode) {
+        this.offencecode = offencecode;
     }
 
-    public Boolean getNegativePoliceRecords() {
-        return negativePoliceRecords;
+    public String getOffencedescription() {
+        return offencedescription;
     }
 
-    public void setNegativePoliceRecords(Boolean negativePoliceRecords) {
-        this.negativePoliceRecords = negativePoliceRecords;
+    public void setOffencedescription(String offencedescription) {
+        this.offencedescription = offencedescription;
     }
 
-    // New Methods
-
-    // Check if the applicant has outstanding tickets
-    public Boolean checkTicketStatus() {
-      
-        return ticket != null && Ticket.unpaid();  
+    public float getFineamount() {
+        return fineamount;
     }
 
-    // Apply for license after checking qualifications
-    public void applyForLicense() {
-        if (accidents || negativePoliceRecords || checkTicketStatus()) {
-            System.out.println("Application Denied based on the disqualification of the proposed driver, you have 5 to 10 business days to provide another driver.");
-        } else {
-            System.out.println("License application is approved.");
-        }
+    public void setFineamount(float fineamount) {
+        this.fineamount = fineamount;
     }
 
-    // Update an application (e.g., updating the ticket status or other fields)
-    public void updateApplication() {
-        System.out.println("Application details have been updated.");
+    public String getVehiclePlateNumber() {
+        return vehiclePlateNumber;
     }
 
-    // Delete an application (e.g., if the applicant decides to withdraw or if the application is invalid)
-    public void deleteApplication() {
-        System.out.println("Application has been deleted.");
+    public void setVehiclePlateNumber(String vehiclePlateNumber) {
+        this.vehiclePlateNumber = vehiclePlateNumber;
     }
 
-    @Override 
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
+    }
+
+    public JCF_Officer getOfficer() {
+        return officer;
+    }
+
+    public void setOfficer(JCF_Officer officer) {
+        this.officer = officer;
+    }
+
+    // toString method for displaying ticket info
+    @Override
     public String toString() {
-        return "User's email is: " + email + "\n" +
-               "Number of ticket(s): " + ticket + "\n" +
-               "Has the User met in any accidents?: " + accidents + "\n" +
-               "What is the User's police record?: " + (negativePoliceRecords ? "Negative" : "Clean") + "\n"; 
+        return "Ticket Number: " + ticketnumber + ", Issue Date: " + issuedate + ", Offence Code: " + offencecode + 
+               ", Offence Description: " + offencedescription + ", Fine Amount: " + fineamount + 
+               ", Vehicle Plate Number: " + vehiclePlateNumber + ", Driver: " + driver + ", Officer: " + officer;
     }
 }
