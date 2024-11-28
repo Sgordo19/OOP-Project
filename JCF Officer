@@ -1,20 +1,27 @@
-import java.util.Scanner;
+package Final_Project;
+
 import java.util.List;
 import java.util.ArrayList;
-import java.io.*;
+import java.util.Scanner;
+import java.io.ObjectOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 public class JCF_Officer extends User {
     private String badgeNumber;
     private String policeStation;
-    private List<Ticket> currentTickets;
+    private List<Ticket> currentTickets;  // Changed to List<Ticket>
 
+   
     // Constructor
     public JCF_Officer(String name, String trn, String dob, String address, String contact_number, String badgeNumber, String policeStation, List<Ticket> currentTickets)
     {
         super(name, trn, dob, address, contact_number);
         this.badgeNumber = badgeNumber;
         this.policeStation = policeStation;
-        this.currentTickets = currentTickets;
+        this.currentTickets = currentTickets != null ? currentTickets : new ArrayList<>(); // Initialize list if null
     }
 
     // Prompt user and add a new ticket
@@ -38,21 +45,81 @@ public class JCF_Officer extends User {
         System.out.println("Enter Vehicle Plate Number:");
         String vehiclePlateNumber = scanner.nextLine();  // Read vehicle plate number
 
-        //(String name, String trn, String dob, String address, String contact_number , float FineAmount, String FineType, String Finedescription, Ticket outstandingTickets, boolean Warrants)
-        // Create a new Driver and Officer objects (For simplicity, we're using placeholder data for now)
-        Driver driver = new Driver("Bobby Clarke", "TRN123", "01-01-1990", "Address", "555-5678", 15000, "Speeding", "Driver was speeding on Highway","N/A", "False");  // Example Driver
+
+        // Create a new Driver and Officer objects 
+        Driver driver = new Driver("Bobby Clarke", "TRN123", "01-01-1990", "Address", "555-5678", 15000, "Speeding", "Driver was speeding on Highway", "N/A", "False");
         JCF_Officer officer = this;  // The officer who is issuing the ticket
 
         // Create the new ticket with current date
-        Ticket ticket = new Ticket(ticketNumber, new java.util.Date(), offenceCode, offenceDescription, fineAmount, vehiclePlateNumber, driver, officer);
+        Ticket ticket = new Ticket("12345", new java.util.Date(), "A01", "Speeding", (float) fineAmount, "ABC123", driver, officer);
 
         // Add the ticket to the list
-        currentTickets.add(ticket);
+        currentTickets.add(ticket);  
         
         // Write to file after adding the ticket
         writeTicketsToFile();
         System.out.println("Ticket Added Successfully!");
     }
+    
+    public void promptAndRetrieveTicket() {
+        Scanner scanner = new Scanner(System.in);
+
+        // Ask for ticket number
+        System.out.println("Enter the ticket number to retrieve:");
+        String ticketNumber = scanner.nextLine();  // Read the ticket number to retrieve
+
+        // Retrieve the ticket by its number
+        Ticket ticket = getTicketByNumber(ticketNumber);
+
+        if (ticket != null) {
+            // If ticket is found, print the ticket details
+            System.out.println("Ticket retrieved: " + ticket);
+        } else {
+            // If ticket is not found, display a message
+            System.out.println("Ticket not found.");
+        }
+    }
+
+    // Method to find a ticket by ticket number
+    private Ticket getTicketByNumber(String ticketNumber) {
+        for (Ticket ticket : currentTickets) {
+            if (ticket.getTicketnumber().equals(ticketNumber)) {
+                return ticket;  // Return ticket if found
+            }
+        }
+        return null;  // Return null if ticket is not found
+    }
+
+    // Method to prompt and delete a ticket based on ticket number
+    public void promptAndDeleteTicket() {
+        Scanner scanner = new Scanner(System.in);
+
+        // Ask for ticket number
+        System.out.println("Enter the ticket number to delete:");
+        String ticketNumber = scanner.nextLine();  // Read the ticket number to delete
+
+        // Try to delete the ticket by its number
+        boolean success = deleteTicket(ticketNumber);
+
+        if (success) {
+            // If deletion is successful, display a success message
+            System.out.println("Ticket deleted successfully.");
+        } else {
+            // If ticket is not found, display a failure message
+            System.out.println("Ticket not found.");
+        }
+    }
+
+    // Method to delete a ticket from the list by ticket number
+    private boolean deleteTicket(String ticketNumber) {
+        Ticket ticket = getTicketByNumber(ticketNumber);
+        if (ticket != null) {
+            currentTickets.remove(ticket);  // Remove the ticket if found
+            return true;  // Indicate that the deletion was successful
+        }
+        return false;  // Return false if the ticket was not found
+    }
+
 
     // Method to write the current tickets to a file (for persistence)
     private void writeTicketsToFile() {
@@ -70,65 +137,6 @@ public class JCF_Officer extends User {
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Error reading from file: " + e.getMessage());
         }
-    }
-    
-    // Get Ticket Method
-    public String getTicketNumber() {
-        return this.Ticket;
-    }
-
-
-    // Prompt user to view a specific ticket
-    public void promptAndRetrieveTicket() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Enter the ticket number to retrieve:");
-        String ticketNumber = scanner.nextLine();  // Read the ticket number to retrieve
-
-        Ticket ticket = getTicketByNumber(ticketNumber);
-
-        if (ticket != null) {
-            System.out.println("Ticket retrieved: " + ticket);
-        } else {
-            System.out.println("Ticket not found.");
-        }
-    }
-
-    // Find a ticket by ticket number
-    private Ticket getTicketByNumber(String ticketNumber) {
-        for (Ticket ticket : currentTickets) {
-            if (ticket.getTicketNumber().equals(ticketNumber)) {
-                return ticket;
-            }
-        }
-        return null;
-    }
-
-    // Prompt user to delete a specific ticket
-    public void promptAndDeleteTicket() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Enter the ticket number to delete:");
-        String ticketNumber = scanner.nextLine();  // Read the ticket number to delete
-
-        boolean success = deleteTicket(ticketNumber);  // Try deleting the ticket
-
-        if (success) {
-            System.out.println("Ticket deleted successfully.");
-        } else {
-            System.out.println("Ticket not found.");
-        }
-    }
-
-    // Delete a ticket from the list by ticket number
-    private boolean deleteTicket(String ticketNumber) {
-        Ticket ticket = getTicketByNumber(ticketNumber);
-        if (ticket != null) {
-            currentTickets.remove(ticket);
-            writeTicketsToFile();  // Update the file after deletion
-            return true;
-        }
-        return false;
     }
 
     // Main Menu to interact with the officer
@@ -162,7 +170,7 @@ public class JCF_Officer extends User {
                     officer.promptAndDeleteTicket();
                     break;
                 case 4:
-                    System.out.println("Exiting...");
+                    System.out.println("Exiting...\n");
                     return;
                 default:
                     System.out.println("Invalid choice, please try again.");
