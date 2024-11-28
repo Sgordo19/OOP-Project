@@ -1,23 +1,21 @@
-package Final_Project;
-
 public class Driver extends User {
-	private Ticket outstandingTickets;
-	private boolean Warrants;
-	
-	private Driver (String name, String trn, String dob, String address, String contact_number , float FineAmount, String FineType, String Finedescription, Ticket outstandingTickets, boolean Warrants)
-	{
-		super(name,trn,dob,address,contact_number);
-		this.outstandingTickets = outstandingTickets;
-		this.Warrants = Warrants;
-	}
-	
-	private Driver (Driver Driv)
-	{
-		super(Driv);
-		outstandingTickets = Driv.outstandingTickets;
-		Warrants = Driv.Warrants;
-	}
+    private String outstandingTickets; // A Ticket object
+    private boolean Warrants; // A boolean value for Warrants
+    
+    // Constructor
+    public Driver(String name, String trn, String dob, String address, String contact_number, 
+                  String outstandingTickets, boolean Warrants) {
+        super(name, trn, dob, address, contact_number); // Calling the User constructor
+        this.outstandingTickets = outstandingTickets;
+        this.Warrants = Warrants;
+    }
 
+    // Constructor for copying Driver object
+    private Driver(Driver Driv) {
+        super(Driv);
+        outstandingTickets = Driv.outstandingTickets;
+        Warrants = Driv.Warrants;
+    }
 
 	public void payticket(String ticketNumber) 
 	{
@@ -37,9 +35,9 @@ public class Driver extends User {
             System.out.println("Payment successful for ticket: " + ticketNumber);
         }
     	}
-
-	
-	@Override 
-	public String toString () {
-		return "The outsatnding Tickets are :" + outstandingTickets + "Warrants?" + Warrants +  "\n";} 
-	}
+	// toString() method to print the Driver's details
+    @Override 
+    public String toString () {
+        return "The outstanding Tickets are: " + outstandingTickets + "Warrants? " + Warrants + "\n"; 
+    } 
+}
