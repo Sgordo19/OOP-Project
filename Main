@@ -114,6 +114,7 @@ public class Main {
                         System.out.println("Applicant with TRN " + trn + " has been updated.");
                         }
                         }
+                break;
 
                    case 3: // Delete Applicant
                     public void deleteApplicant(String trn) {
@@ -123,6 +124,7 @@ public class Main {
                     System.out.println("Applicant with TRN " + trn + " not found.");
                 }
                 }
+                break;
 
                 case 4:
                 // Reject Applicant
@@ -137,6 +139,7 @@ public class Main {
                 return false;
             }
         }
+                break;
 
                 case 5:// Approve Applicant
                 public boolean approveApplicant(String trn) {
