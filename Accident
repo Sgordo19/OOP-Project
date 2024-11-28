@@ -1,49 +1,71 @@
 package Final_Project;
 
+import java.util.Date;
+
 public class Accident {
-	private Date accidentDate;
-	private String location;
-	private String severity;
+    private Date accidentDate;  // Date when the accident occurred
+    private String location;    // Location of the accident
+    private String severity;    // Severity of the accident
 
-	public Accident (Date accidentDate, String location, String severity)
-	{
-		this.accidentDate = accidentDate;
-		this.location = location;
-		this.severity = severity;
-	}
-	
-	public Accident( Accident acc)
-	{
-		accidentDate = acc.accidentDate;
-		location = acc.location;
-		severity = acc.severity;
-	}
+    // Constructor to initialize accident details
+    public Accident(Date accidentDate, String location, String severity) {
+        this.accidentDate = accidentDate;
+        this.location = location;
+        this.severity = severity;
+    }
 
-	public Date getAccidentDate() {
-		return accidentDate;
-	}
+    // Copy constructor to create a new Accident object by copying another one
+    public Accident(Accident acc) {
+        this.accidentDate = acc.accidentDate;
+        this.location = acc.location;
+        this.severity = acc.severity;
+    }
 
-	public void setAccidentDate(Date accidentDate) {
-		this.accidentDate = accidentDate;
-	}
+    // Getter for the accident date
+    public Date getAccidentDate() {
+        return accidentDate;
+    }
 
-	public String getLocation() {
-		return location;
-	}
+    // Setter for the accident date
+    public void setAccidentDate(Date accidentDate) {
+        this.accidentDate = accidentDate;
+    }
 
-	public void setLocation(String location) {
-		this.location = location;
-	}
+    // Getter for the location of the accident
+    public String getLocation() {
+        return location;
+    }
 
-	public String getSeverity() {
-		return severity;
-	}
+    // Setter for the location of the accident
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
-	public void setSeverity(String severity) {
-		this.severity = severity;
-	}
+    // Getter for the severity of the accident
+    public String getSeverity() {
+        return severity;
+    }
 
-	@Override 
-	public String toString () {
-		return "Accident Date :" + accidentDate + "The location is:" + location + "The Severity of the situation: " + severity + "\n";}
+    // Setter for the severity of the accident
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
+
+    // Method to check if the accident is recent (within the last 2 years)
+    public boolean isAccidentRecent() {
+        long currentTime = System.currentTimeMillis();
+        long accidentTime = accidentDate.getTime();
+        long twoYearsInMillis = 2 * 365 * 24 * 60 * 60 * 1000L; // Approx. 2 years in milliseconds
+        return (currentTime - accidentTime) <= twoYearsInMillis;
+    }
+
+    // Override the toString method to provide a string representation of the Accident
+    @Override
+    public String toString() {
+        return "Accident Date: " + accidentDate.toString() + "\n" +
+               "Location: " + location + "\n" +
+               "Severity: " + severity + "\n";
+    }
+
 }
+
