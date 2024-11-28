@@ -1,108 +1,93 @@
 package Final_Project;
 
-public class Ticket {
-	private String ticketnumber ;
-	private Date issuedate;
-	private String offencecode;
-	private String offencedescription;
-	private float fineamount;
-	private String vehiclePlateNumber;
-	private Driver driver;
-	private JCF_Officer officer;
-	
-	public Ticket(String ticketnumber, Date issuedate, String offencecode, String offencedescription, float fineamount, String vehiclePlateNumber, Driver driver, JCF_Officer officer)
-	{
-		this.ticketnumber = ticketnumber;
-		this.issuedate = issuedate;
-		this.offencecode = offencecode;
-		this.offencedescription = offencedescription;
-		this.fineamount = fineamount;
-		this.vehiclePlateNumber = vehiclePlateNumber;
-		this.driver = driver;
-		this.officer = officer;
-	}
-	
-	public Ticket( Ticket tic)
-	{
-		ticketnumber = tic.ticketnumber;
-		issuedate = tic.issuedate;
-		offencecode = tic.offencecode;
-		offencedescription = tic.offencedescription;
-		fineamount = tic.fineamount;
-		vehiclePlateNumber = tic.vehiclePlateNumber;
-		driver = tic.driver;
-		officer = tic.officer;
-	}
+public class Applicant extends User {
+    private String email;
+    private Ticket ticket;
+    private Boolean accidents;
+    private Boolean negativePoliceRecords;
 
+    // Primary Constructor
+    public Applicant(String name, String trn, String dob, String address, String contact_number, String email, Ticket ticket, Boolean accidents, Boolean negativePoliceRecords) {
+        super(name, trn, dob, address, contact_number);
+        this.email = email;
+        this.ticket = ticket;
+        this.accidents = accidents;
+        this.negativePoliceRecords = negativePoliceRecords;
+    }
 
-	
-	public String getTicketnumber() {
-		return ticketnumber;
-	}
+    public Applicant(Applicant app) {
+        super(app);
+        email = app.email;
+        ticket = app.ticket;
+        accidents = app.accidents;
+        negativePoliceRecords = app.negativePoliceRecords;
+    }
 
-	public void setTicketnumber(String ticketnumber) {
-		this.ticketnumber = ticketnumber;
-	}
+    // Getters and Setters
+    public String getEmail() {
+        return email;
+    }
 
-	public Date getIssuedate() {
-		return issuedate;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public void setIssuedate(Date issuedate) {
-		this.issuedate = issuedate;
-	}
+    public Ticket getTicket() {
+        return ticket;
+    }
 
-	public String getOffencecode() {
-		return offencecode;
-	}
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
+    }
 
-	public void setOffencecode(String offencecode) {
-		this.offencecode = offencecode;
-	}
+    public Boolean getAccidents() {
+        return accidents;
+    }
 
-	public String getOffencedescription() {
-		return offencedescription;
-	}
+    public void setAccidents(Boolean accidents) {
+        this.accidents = accidents;
+    }
 
-	public void setOffencedescription(String offencedescription) {
-		this.offencedescription = offencedescription;
-	}
+    public Boolean getNegativePoliceRecords() {
+        return negativePoliceRecords;
+    }
 
-	public float getFineamount() {
-		return fineamount;
-	}
+    public void setNegativePoliceRecords(Boolean negativePoliceRecords) {
+        this.negativePoliceRecords = negativePoliceRecords;
+    }
 
-	public void setFineamount(float fineamount) {
-		this.fineamount = fineamount;
-	}
+    // New Methods
 
-	public String getVehiclePlateNumber() {
-		return vehiclePlateNumber;
-	}
+    // Check if the applicant has outstanding tickets
+    public Boolean checkTicketStatus() {
+      
+        return ticket != null && Ticket.unpaid();  
+    }
 
-	public void setVehiclePlateNumber(String vehiclePlateNumber) {
-		this.vehiclePlateNumber = vehiclePlateNumber;
-	}
+    // Apply for license after checking qualifications
+    public void applyForLicense() {
+        if (accidents || negativePoliceRecords || checkTicketStatus()) {
+            System.out.println("Application Denied based on the disqualification of the proposed driver, you have 5 to 10 business days to provide another driver.");
+        } else {
+            System.out.println("License application is approved.");
+        }
+    }
 
-	public Driver getDriver() {
-		return driver;
-	}
+    // Update an application (e.g., updating the ticket status or other fields)
+    public void updateApplication() {
+        System.out.println("Application details have been updated.");
+    }
 
-	public void setDriver(Driver driver) {
-		this.driver = driver;
-	}
+    // Delete an application (e.g., if the applicant decides to withdraw or if the application is invalid)
+    public void deleteApplication() {
+        System.out.println("Application has been deleted.");
+    }
 
-	public JCF_Officer getOfficer() {
-		return officer;
-	}
-
-	public void setOfficer(JCF_Officer officer) {
-		this.officer = officer;
-	}
-
-	@Override 
-	public String toString () {
-		return "Ticket Number: " + ticketnumber + "Issue Date:" +  issuedate + "Offence Code:" +  offencecode + 
-			   "The Offence Description: " +  offencedescription + "Fineamount: " + fineamount+ "The Vehicle Plate Number :" + vehiclePlateNumber +
-			   "The Driver is: " + driver + "The officer is: " +officer+"\n";} 	
+    @Override 
+    public String toString() {
+        return "User's email is: " + email + "\n" +
+               "Number of ticket(s): " + ticket + "\n" +
+               "Has the User met in any accidents?: " + accidents + "\n" +
+               "What is the User's police record?: " + (negativePoliceRecords ? "Negative" : "Clean") + "\n"; 
+    }
 }
