@@ -17,6 +17,27 @@ public class Driver extends User {
 		outstandingTickets = Driv.outstandingTickets;
 		Warrants = Driv.Warrants;
 	}
+
+
+	public void payticket(String ticketNumber) 
+	{
+        Ticket ticket = findTicketByNumber(ticketNumber);
+        if (ticket == null) 
+	{
+            System.out.println("Ticket not found.");
+        } else if (ticket.isPastDue()) 
+	{
+            System.out.println("Payment cannot be made. The ticket is past due.");
+        } else if ("Paid".equalsIgnoreCase(ticket.getStatus())) 
+	{
+            System.out.println("Ticket has already been paid.");
+        } else 
+	{
+            ticket.setStatus("Paid");
+            System.out.println("Payment successful for ticket: " + ticketNumber);
+        }
+    	}
+
 	
 	@Override 
 	public String toString () {
