@@ -6,94 +6,69 @@ import java.util.Scanner;
 
 public class Ticket {
     private String ticketNumber;
-    private Date issueDate;
     private String offenceCode;
     private String offenceDescription;
-    private float fineAmount;
+    private double fineAmount;
     private String vehiclePlateNumber;
     private Driver driver;
     private JCF_Officer officer;
-    private String status; 
-    private Date dueDate; 
-    private Date courtDate; 
+    private String status; // "Paid" or "Unpaid"
+    private Date issueDate;
+    private Date dueDate;
+    private Date courtDate;
 
     // Constructor
-    public Ticket(String ticketNumber, Date issueDate, String offenceCode, String offenceDescription, float fineAmount, String vehiclePlateNumber, Driver driver, JCF_Officer officer, Date dueDate) {
+    public Ticket(String ticketNumber, Date issueDate, String offenceCode, String offenceDescription,
+            float fineAmount, String vehiclePlateNumber, Driver driver, JCF_Officer officer,
+            String status, Date dueDate, Date courtDate)  {
         this.ticketNumber = ticketNumber;
-        this.issueDate = issueDate;
         this.offenceCode = offenceCode;
         this.offenceDescription = offenceDescription;
         this.fineAmount = fineAmount;
-        this.vehiclePlateNumber = vehiclePlateNumber;
+        this.issueDate = issueDate;
+        this.dueDate = dueDate;
+        this.status = "Unpaid"; // Default status
+        this.courtDate = null; // Default court date (null if not escalated)
         this.driver = driver;
         this.officer = officer;
-        this.status = "Unpaid"; // Default status
-        this.dueDate = dueDate;
-        this.courtDate = null; // Default to null
+        this.vehiclePlateNumber = driver.getVehiclePlateNumber(); // Getting the vehicle plate number from Driver class
     }
 
-    // Copy constructor
-    public Ticket(Ticket tic) {
-        this.ticketNumber = tic.ticketNumber;
-        this.issueDate = tic.issueDate;
-        this.offenceCode = tic.offenceCode;
-        this.offenceDescription = tic.offenceDescription;
-        this.fineAmount = tic.fineAmount;
-        this.vehiclePlateNumber = tic.vehiclePlateNumber;
-        this.driver = tic.driver;
-        this.officer = tic.officer;
-        this.status = tic.status;
-        this.dueDate = tic.dueDate;
-        this.courtDate = tic.courtDate;
-    }
-
-    // Getter and setter methods
+    // Getter and Setter methods
     public String getTicketNumber() {
         return ticketNumber;
-    }
-
-    public void setTicketNumber(String ticketNumber) {
-        this.ticketNumber = ticketNumber;
-    }
-
-    public Date getIssueDate() {
-        return issueDate;
-    }
-
-    public void setIssueDate(Date issueDate) {
-        this.issueDate = issueDate;
     }
 
     public String getOffenceCode() {
         return offenceCode;
     }
 
-    public void setOffenceCode(String offenceCode) {
-        this.offenceCode = offenceCode;
-    }
-
     public String getOffenceDescription() {
         return offenceDescription;
     }
 
-    public void setOffenceDescription(String offenceDescription) {
-        this.offenceDescription = offenceDescription;
-    }
-
-    public float getFineAmount() {
+    public double getFineAmount() {
         return fineAmount;
     }
 
-    public void setFineAmount(float fineAmount) {
-        this.fineAmount = fineAmount;
+    public Date getIssueDate() {
+        return issueDate;
     }
 
-    public String getVehiclePlateNumber() {
-        return vehiclePlateNumber;
+    public Date getDueDate() {
+        return dueDate;
     }
 
-    public void setVehiclePlateNumber(String vehiclePlateNumber) {
-        this.vehiclePlateNumber = vehiclePlateNumber;
+    public String getStatus() {
+        return status;
+    }
+
+    public Date getCourtDate() {
+        return courtDate;
+    }
+
+    public void setCourtDate(Date courtDate) {
+        this.courtDate = courtDate;
     }
 
     public Driver getDriver() {
@@ -112,56 +87,29 @@ public class Ticket {
         this.officer = officer;
     }
 
-    public String getStatus() {
-        return status;
+    public String getVehiclePlateNumber() {
+        return vehiclePlateNumber;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Date getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
-    }
-
-    public Date getCourtDate() {
-        return courtDate;
-    }
-
-    public void setCourtDate(Date courtDate) {
-        this.courtDate = courtDate;
+    public void setVehiclePlateNumber(String vehiclePlateNumber) {
+        this.vehiclePlateNumber = vehiclePlateNumber;
     }
 
     // Methods
-    public boolean payTicket() {
-        Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Your ticket number is " + ticketNumber);
-        System.out.println("Fine Amount: $" + fineAmount);
-        System.out.print("How much do you want to pay? ");
-
-        double payment = scanner.nextDouble();
-
-        if (payment < fineAmount) {
-            fineAmount -= payment; 
-            System.out.println("Payment accepted. Ticket still unpaid. Remaining balance: $" + fineAmount);
-            return false; 
+    // Pay the ticket
+    public void payTicket() {
+        if ("Paid".equalsIgnoreCase(this.status)) {
+            System.out.println("Ticket already paid.");
         } else {
-            fineAmount = 0;
-            status = "Paid"; 
-            System.out.println("Payment accepted. Ticket paid in full.");
-            return true; 
+            this.status = "Paid";
+            System.out.println("Ticket " + this.ticketNumber + " has been successfully paid.");
         }
     }
 
     // Check the ticket status
     public void checkTicketStatus() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
         System.out.println("Ticket Status for " + ticketNumber + ":");
         System.out.println("Status: " + status);
         if ("Unpaid".equalsIgnoreCase(status) && dueDate.before(new Date())) {
@@ -174,16 +122,22 @@ public class Ticket {
         }
     }
 
-    // Issue the ticket
-    public static Ticket issueTicket(String ticketNumber, String offenceCode, String description, float fineAmount, Date issueDate, int dueInDays) {
-        Date dueDate = new Date(issueDate.getTime() + (dueInDays * 24L * 60L * 60L * 1000L)); // Calculate due date
-        return new Ticket(ticketNumber, issueDate, offenceCode, description, fineAmount, "ABC123", null, null, dueDate);
-    }
+    // Issue the ticket (static method to create a new ticket)
+    public static Ticket issueTicket(String ticketNumber, String offenceCode, String offenceDescription, 
+            float fineAmount, Date issueDate, Driver driver, JCF_Officer officer, 
+            int dueInDays, String status, Date courtDate) {
+// Calculate due date by adding the specified number of days to the issue date
+Date dueDate = new Date(issueDate.getTime() + (dueInDays * 24L * 60L * 60L * 1000L));
+
+// Return a new Ticket with the correct parameters
+return new Ticket(ticketNumber, issueDate, offenceCode, offenceDescription, fineAmount, 
+ driver.getVehiclePlateNumber(), driver, officer, status, dueDate, courtDate);
+}
+
 
     // Display ticket details
     public void displayTicketDetails() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
         System.out.println("Ticket Number: " + ticketNumber);
         System.out.println("Offence Code: " + offenceCode);
         System.out.println("Description: " + offenceDescription);
@@ -195,5 +149,24 @@ public class Ticket {
             System.out.println("Court Date: " + dateFormat.format(courtDate));
         }
         System.out.println("---------------------------");
+    }
+
+    // Pay ticket method (with additional logic if necessary)
+    public boolean payTicket(float paymentAmount) {
+        if ("Paid".equalsIgnoreCase(this.status)) {
+            System.out.println("Ticket already paid.");
+            return true;
+        }
+
+        if (paymentAmount < fineAmount) {
+            fineAmount -= paymentAmount;
+            System.out.println("Payment accepted. Remaining balance: $" + fineAmount);
+            return false;
+        } else {
+            fineAmount = 0;
+            status = "Paid";
+            System.out.println("Ticket fully paid.");
+            return true;
+        }
     }
 }
