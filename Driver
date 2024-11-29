@@ -126,6 +126,17 @@ public class Driver extends User {
 }
 
 
+// Method to check for warrants
+public void checkForWarrants() 
+{
+    if (Warrants) {
+        System.out.println("A warrant has been issued for your arrest."); // If the Warrants boolean is true, it means there is a warrant
+    } else {
+        System.out.println("No warrants have been issued for your arrest."); // If the Warrants boolean is false, there is no warrant
+    }
+}
+
+
 	// toString() method to print the Driver's details
     @Override 
     public String toString () {
