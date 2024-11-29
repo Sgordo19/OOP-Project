@@ -102,15 +102,16 @@ public class Ticket {
     }
 
    // Methods
-    // 1. Pay the ticket
-    public void payTicket() {
-        if ("Paid".equalsIgnoreCase(this.status)) {
-            System.out.println("Ticket already paid.");
+    if (payment < fineAmount) {
+            fineAmount -= payment; // Reduce balance
+            System.out.println("Payment accepted. Ticket still unpaid. Remaining balance: $" + fineAmount);
+            return false; // Ticket is still unpaid
         } else {
-            this.status = "Paid";
-            System.out.println("Ticket " + this.ticketNumber + " has been successfully paid.");
-        }
-    }
+            fineAmount = 0;
+            status = "Paid"; // Mark ticket as fully paid
+            System.out.println("Payment accepted. Ticket paid in full.");
+            return true; // Ticket is fully paid
+}
 
     // 2. Check the ticket status
     public void checkTicketStatus() {
