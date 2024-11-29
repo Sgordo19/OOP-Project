@@ -1,6 +1,7 @@
 public class Driver extends User {
     private String outstandingTickets; // A Ticket object
     private boolean Warrants; // A boolean value for Warrants
+    boolean exit = false;
     
     // Constructor
     public Driver(String name, String trn, String dob, String address, String contact_number, 
@@ -129,9 +130,10 @@ public class Driver extends User {
 // Method to check for warrants
 public void checkForWarrants() 
 {
-    if (Warrants) {
-        System.out.println("A warrant has been issued for your arrest."); // If the Warrants boolean is true, it means there is a warrant
-    } else {
+    if (Warrants) // If the Warrants boolean is true, it means there is a warrant
+	{
+        System.out.println("A warrant has been issued for your arrest."); 
+	} else {
         System.out.println("No warrants have been issued for your arrest."); // If the Warrants boolean is false, there is no warrant
     }
 }
