@@ -24,7 +24,7 @@ public class Driver extends User {
         String trn = scanner.nextLine();
 
         // Check if the TRN exists in the ticket database
-        Ticket ticket = ticket.getTRN;
+        Ticket ticket = Ticket.findTicketByTRN(trn);
 
 	 while (!exit) {
             System.out.println("\nDriver Menu:");
@@ -111,7 +111,20 @@ public class Driver extends User {
                 String paymentChoice = scanner.nextLine());
 
                 if (paymentChoice.equals("yes")) {
-              //Incomplete add method for payment
+              private static void makePayment(Ticket ticket, Scanner scanner) {
+   		 if (ticket != null && !ticket.isPaid()) {
+       			 System.out.println("Enter cardholder's name: ");
+       			 String cardHolderName = scanner.nextLine();
+       			 System.out.println("Enter account number: ");
+       			 String accountNumber = scanner.nextLine();
+        		 System.out.println("Enter expiry month (MM): ");
+        		 String expiryMonth = scanner.nextLine();
+        		 System.out.println("Enter expiry year (YYYY): ");
+        		 String expiryYear = scanner.nextLine();
+
+        // Simulate payment
+        System.out.println("Payment Successful for " + cardHolderName + "! Fine of $" + ticket.getFineAmount() + " has been paid.");
+        ticket.setPaid(true);  // Mark ticket as paid
                     ticket.setPaid(true);
                     System.out.println("Payment successful! Fine has been paid.");
                 } else {
