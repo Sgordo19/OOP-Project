@@ -126,6 +126,37 @@ public class Driver extends User {
         }
 }
 
+// Method to check for past-due tickets
+public void checkPastDueTickets() 
+{
+	System.out.println("Checking for past-due tickets...");
+
+    for (Ticket ticket : outstandingTickets)  // Iterate through each ticket in the outstandingTickets collection
+{
+        // Check if the ticket is not null and if the ticket is overdue
+        if (ticket != null && ticket.isOverdue())
+{
+            ticket.displayTicketDetails(); // If the ticket is overdue, display its details by calling this function from ticket class
+        }
+    }
+}
+
+// Method to view unpaid tickets
+public void viewUnpaidTickets() 
+{
+    System.out.println("Viewing unpaid tickets...");
+    for (Ticket ticket : outstandingTickets) // Iterate through each ticket in the outstandingTickets collection
+{
+        
+        // Check if the ticket is not null and if the ticket's status is "Unpaid"
+        if (ticket != null && ticket.getStatus().equals("Unpaid")) {
+            
+            // If the ticket is unpaid, display its details by calling this function from ticket class
+            ticket.displayTicketDetails();
+        }
+    }
+}
+
 
 // Method to check for warrants
 public void checkForWarrants() 
