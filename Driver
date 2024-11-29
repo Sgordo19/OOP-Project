@@ -16,6 +16,115 @@ public class Driver extends User {
         outstandingTickets = Driv.outstandingTickets;
         Warrants = Driv.Warrants;
     }
+// Driver Menu Method
+    private static void driverMenu(Scanner scanner) {
+        System.out.println("Driver Menu: ");
+        System.out.println("Please enter your TRN (Taxpayer Registration Number):");
+        String trn = scanner.nextLine();
+
+        // Check if the TRN exists in the ticket database
+        Ticket ticket = ticket.getTRN;
+
+	 while (!exit) {
+            System.out.println("\nDriver Menu:");
+            System.out.println("Please select one of the following options (1-6):");
+            System.out.println("1. Check all past tickets");
+            System.out.println("2. Make an online payment for tickets");
+            System.out.println("3. Check past-due tickets");
+            System.out.println("4. View ticket payments that have not passed due");
+            System.out.println("5. Check for warrant issued for your arrest");
+            System.out.println("6. Exit");
+            
+            // Read user input
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Clear the buffer
+            
+            switch (choice) {
+                case 1:
+                    // Handle option 1: Check all past tickets
+                    System.out.println("\nYou selected: Check all past tickets");
+                    // Call the method to display all past tickets
+                    displayPastTickets();
+
+                    break;
+
+                case 2:
+                    // Handle option 2: Make online payment for tickets
+                    System.out.println("\nYou selected: Make online payment for tickets");
+                    // Call the method to process online payment
+                    makePayment();
+
+                    break;
+
+                case 3:
+                    // Handle option 3: Check past-due tickets
+                    System.out.println("\nYou selected: Check past-due tickets");
+                    // Call the method to check past due tickets
+                    checkPastDueTickets();
+
+                    break;
+
+                case 4:
+                    // Handle option 4: View ticket payments that have not passed due
+                    System.out.println("\nYou selected: View ticket payments that have not passed due");
+                    // Call the method to display unpaid tickets
+                    viewUnpaidTickets();
+
+                    break;
+
+                case 5:
+                    // Handle option 5: Check for warrant issued for your arrest
+                    System.out.println("\nYou selected: Check for warrant issued for your arrest");
+                    // Call the method to check if a warrant is issued
+                    checkForWarrants();
+
+                    break;
+
+                case 6:
+                    // Handle option 6: Exit the program
+                    System.out.println("\nExiting the driver menu.");
+                    exit = true;  // Set the flag to exit the loop
+
+                    break;
+
+                default:
+                    // Handle invalid input
+                    System.out.println("\nInvalid choice. Please select a number between 1 and 6.");
+            }
+        }
+
+        scanner.close();  // Close the scanner after use
+    }
+
+ private static void displayPastTickets() {
+        System.out.println("Displaying all past tickets ");
+        if (ticket != null) {
+            // Display ticket information
+            System.out.println("Ticket found for TRN: " + trn);
+            System.out.println("Fine Amount: $" + ticket.getFineAmount());
+            System.out.println("Paid: " + (ticket.isPaid() ? "Yes" : "No"));
+            
+            // Offer to pay fine if it's not already paid
+            if (!ticket.isPaid()) {
+                System.out.println("Would you like to pay this fine? (Yes/No)");
+                String paymentChoice = scanner.nextLine());
+
+                if (paymentChoice.equals("yes")) {
+              //Incomplete add method for payment
+                    ticket.setPaid(true);
+                    System.out.println("Payment successful! Fine has been paid.");
+                } else {
+                    System.out.println("You chose not to pay the fine at this time.");
+                }
+            } else {
+                System.out.println("This fine has already been paid.");
+            }
+	else {
+            // If no ticket is found for the provided TRN
+            System.out.println("No tickets found for the provided TRN.");
+        }
+}
+
 
 	// toString() method to print the Driver's details
     @Override 
