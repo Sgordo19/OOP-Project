@@ -39,9 +39,9 @@ public class JCF_Officer extends User {
         System.out.println("Enter Offence Code:");
         String offenceCode = scanner.nextLine();
 
-        // Use calculateFine method to determine the fine based on offence code
-        float fineAmount = calculateFine(offenceCode);
-        System.out.println("Fine Amount: " + fineAmount);
+        // Create a Fine object to handle fine calculation
+        Fine fine = calculateFine(offenceCode);
+        System.out.println("Fine Amount: " + fine.getFineAmount());
 
         System.out.println("Enter Offence Description:");
         String offenceDescription = scanner.nextLine();
@@ -69,7 +69,7 @@ public class JCF_Officer extends User {
 
         // Create and add ticket
         Ticket ticket = new Ticket(ticketNumber, issueDate, offenceCode, offenceDescription, 
-                fineAmount, vehiclePlateNumber, driver, officer, status, dueDate, courtDate);
+                fine.getFineAmount(), vehiclePlateNumber, driver, officer, status, dueDate, courtDate);
 
         currentTickets[ticketCount++] = ticket; // Add ticket to the array
         writeTicketsToFile();
@@ -86,17 +86,32 @@ public class JCF_Officer extends User {
         return null;
     }
 
-    // Calculate fine based on offence code
-    private float calculateFine(String offenceCode) {
+    // Calculate fine based on offence code and return a Fine object
+    private Fine calculateFine(String offenceCode) {
+        float fineAmount;
+        String fineType = "";
+        String fineDescription = "";
+
         // Example logic: Assign fine based on offenceCode
         switch (offenceCode) {
             case "SPEED01":
-                return 5000.0f;
+                fineAmount = 5000.0f;
+                fineType = "Speeding";
+                fineDescription = "Exceeding speed limit";
+                break;
             case "PARK02":
-                return 3000.0f;
+                fineAmount = 3000.0f;
+                fineType = "Parking";
+                fineDescription = "Illegal parking";
+                break;
             default:
-                return 1000.0f;
+                fineAmount = 1000.0f;
+                fineType = "General";
+                fineDescription = "General offence";
+                break;
         }
+
+        return new Fine(fineAmount, fineType, fineDescription);
     }
 
     // Calculate due date, adding 30 days to the current date
@@ -233,9 +248,11 @@ public class JCF_Officer extends User {
                     break;
                 case 4:
                     System.out.println("Exiting...");
+                    officer.writeTicketsToFile();
+                    officer.writeDriversToFile();
                     return;
                 default:
-                    System.out.println("Invalid choice, try again.");
+                    System.out.println("Invalid choice. Try again.");
             }
         }
     }
