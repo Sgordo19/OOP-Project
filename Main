@@ -104,7 +104,7 @@ public class Main {
                 break;
 
                   case 2:
-                        // Update Applicant
+                        // Update Applicant (needs adjustments)
                     public void updateApplicant(String trn, Applicant updatedApplicant) {
                     if (applicant.get(trn) == null) {
                         System.out.println("Applicant with TRN " + trn + " does not exist.");
