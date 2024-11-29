@@ -1,49 +1,48 @@
 package Final_Project;
 
-public class Fine {
-	private float FineAmount;
-	private String FineType;
-	private String Finedescription;
-	
-	public Fine (float FineAmount, String FineType, String Finedescription)
-	{
-		this.FineAmount = FineAmount;
-		this.FineType = FineType;
-		this.Finedescription = Finedescription;
-	}
-	
-	public Fine( Fine Fin)
-	{
-		FineAmount = Fin.FineAmount;
-		FineType = Fin.FineType;
-		Finedescription = Fin.Finedescription;		
-	}
+import java.io.Serializable;
 
-	public float getFineAmount() {
-		return FineAmount;
-	}
+public class Fine implements Serializable {
+    private float fineAmount;
+    private String fineType;
+    private String fineDescription;
 
-	public void setFineAmount(float fineAmount) {
-		FineAmount = fineAmount;
-	}
+    // Constructor
+    public Fine(float fineAmount, String fineType, String fineDescription) {
+        this.fineAmount = fineAmount;
+        this.fineType = fineType;
+        this.fineDescription = fineDescription;
+    }
 
-	public String getFineType() {
-		return FineType;
-	}
+    // Getter methods
+    public float getFineAmount() {
+        return fineAmount;
+    }
 
-	public void setFineType(String fineType) {
-		FineType = fineType;
-	}
+    public String getFineType() {
+        return fineType;
+    }
 
-	public String getFinedescription() {
-		return Finedescription;
-	}
+    public String getFineDescription() {
+        return fineDescription;
+    }
 
-	public void setFinedescription(String finedescription) {
-		Finedescription = finedescription;
-	}
+    // Setter methods (if needed)
+    public void setFineAmount(float fineAmount) {
+        this.fineAmount = fineAmount;
+    }
 
-	@Override 
-	public String toString () {
-		return "The Fine Amount :" + FineAmount + "The Fine Type :" + FineType+ "The Fine Description: " + Finedescription + "\n";} 
+    public void setFineType(String fineType) {
+        this.fineType = fineType;
+    }
+
+    public void setFineDescription(String fineDescription) {
+        this.fineDescription = fineDescription;
+    }
+
+    // String representation of Fine
+    @Override
+    public String toString() {
+        return "Fine Type: " + fineType + "\nDescription: " + fineDescription + "\nAmount: " + fineAmount;
+    }
 }
