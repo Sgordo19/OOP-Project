@@ -9,7 +9,7 @@ public class Processing_Officer extends User{
 		this.officerID = officerID;
 	}
 	
-	private Processing_Officer (Processing_Officer pro)
+	public Processing_Officer (Processing_Officer pro)
 	{
 		super (pro);
 		officerID = pro.officerID;
@@ -22,8 +22,46 @@ public class Processing_Officer extends User{
 	public void setOfficerID(String officerID) {
 		this.officerID = officerID;
 	}
-	
-	@Override 
-	public String toString () {
-		return "The Officer's ID is :" + officerID+ "\n";} 
+
+	public void checkApplicantEligibility(User ppv) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Display the applicant's information
+        System.out.println("Applicant Details:");
+        System.out.println("Name: " + ppv.getName());
+        System.out.println("TRN: " + ppv.getTrn());
+        System.out.println("Date of Birth: " + ppv.getDob());
+        System.out.println("Address: " + ppv.getAddress());
+        System.out.println("Contact Number: " + ppv.getContactNumber());
+
+        // Check if the applicant has outstanding tickets
+        System.out.println("\nDoes the applicant have any outstanding tickets? (Yes/No): ");
+        String ticketAns = scanner.nextLine();
+
+        // Check if the applicant has a negative police record
+        System.out.println("Does the applicant have a negative police record? (Yes/No): ");
+        String policeRecordAns = scanner.nextLine();
+
+        // Evaluate eligibility based on responses
+        checkEligibility(ticketAns, policeRecordAns);
+    }
+
+    // Method to evaluate the eligibility of the applicant
+    private void checkEligibility(String ticketAns, String policeRecordAns) {
+        // Check if the applicant has any issues with tickets or police records
+        if ("Yes".equals(ticketAns)) {
+            System.out.println("Applicant has outstanding tickets. Application denied.");
+        } else if ("Yes".equals(policeRecordAns)) {
+            System.out.println("Applicant has a negative police record. Application denied.");
+        } else {
+            System.out.println("Applicant is eligible for a red plate license.");
+        }
+    }
+
+    // Display officer's ID
+    @Override
+    public String toString() {
+        return "Processing Officer ID: " + officerID;
+    }
+
 }
