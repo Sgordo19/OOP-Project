@@ -1,80 +1,91 @@
 package Final_Project;
 
 import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Scanner;
 
 public class Ticket {
-    private String ticketnumber;
-    private Date issuedate;
-    private String offencecode;
-    private String offencedescription;
-    private float fineamount;
+    private String ticketNumber;
+    private Date issueDate;
+    private String offenceCode;
+    private String offenceDescription;
+    private float fineAmount;
     private String vehiclePlateNumber;
     private Driver driver;
     private JCF_Officer officer;
+    private String status; 
+    private Date dueDate; 
+    private Date courtDate; 
 
     // Constructor
-    public Ticket(String ticketnumber, Date issuedate, String offencecode, String offencedescription, float fineamount, String vehiclePlateNumber, Driver driver, JCF_Officer officer) {
-        this.ticketnumber = ticketnumber;
-        this.issuedate = issuedate;
-        this.offencecode = offencecode;
-        this.offencedescription = offencedescription;
-        this.fineamount = fineamount;
+    public Ticket(String ticketNumber, Date issueDate, String offenceCode, String offenceDescription, float fineAmount, String vehiclePlateNumber, Driver driver, JCF_Officer officer, Date dueDate) {
+        this.ticketNumber = ticketNumber;
+        this.issueDate = issueDate;
+        this.offenceCode = offenceCode;
+        this.offenceDescription = offenceDescription;
+        this.fineAmount = fineAmount;
         this.vehiclePlateNumber = vehiclePlateNumber;
         this.driver = driver;
         this.officer = officer;
+        this.status = "Unpaid"; // Default status
+        this.dueDate = dueDate;
+        this.courtDate = null; // Default to null
     }
 
     // Copy constructor
     public Ticket(Ticket tic) {
-        ticketnumber = tic.ticketnumber;
-        issuedate = tic.issuedate;
-        offencecode = tic.offencecode;
-        offencedescription = tic.offencedescription;
-        fineamount = tic.fineamount;
-        vehiclePlateNumber = tic.vehiclePlateNumber;
-        driver = tic.driver;
-        officer = tic.officer;
+        this.ticketNumber = tic.ticketNumber;
+        this.issueDate = tic.issueDate;
+        this.offenceCode = tic.offenceCode;
+        this.offenceDescription = tic.offenceDescription;
+        this.fineAmount = tic.fineAmount;
+        this.vehiclePlateNumber = tic.vehiclePlateNumber;
+        this.driver = tic.driver;
+        this.officer = tic.officer;
+        this.status = tic.status;
+        this.dueDate = tic.dueDate;
+        this.courtDate = tic.courtDate;
     }
 
     // Getter and setter methods
-    public String getTicketnumber() {
-        return ticketnumber;
+    public String getTicketNumber() {
+        return ticketNumber;
     }
 
-    public void setTicketnumber(String ticketnumber) {
-        this.ticketnumber = ticketnumber;
+    public void setTicketNumber(String ticketNumber) {
+        this.ticketNumber = ticketNumber;
     }
 
-    public Date getIssuedate() {
-        return issuedate;
+    public Date getIssueDate() {
+        return issueDate;
     }
 
-    public void setIssuedate(Date issuedate) {
-        this.issuedate = issuedate;
+    public void setIssueDate(Date issueDate) {
+        this.issueDate = issueDate;
     }
 
-    public String getOffencecode() {
-        return offencecode;
+    public String getOffenceCode() {
+        return offenceCode;
     }
 
-    public void setOffencecode(String offencecode) {
-        this.offencecode = offencecode;
+    public void setOffenceCode(String offenceCode) {
+        this.offenceCode = offenceCode;
     }
 
-    public String getOffencedescription() {
-        return offencedescription;
+    public String getOffenceDescription() {
+        return offenceDescription;
     }
 
-    public void setOffencedescription(String offencedescription) {
-        this.offencedescription = offencedescription;
+    public void setOffenceDescription(String offenceDescription) {
+        this.offenceDescription = offenceDescription;
     }
 
-    public float getFineamount() {
-        return fineamount;
+    public float getFineAmount() {
+        return fineAmount;
     }
 
-    public void setFineamount(float fineamount) {
-        this.fineamount = fineamount;
+    public void setFineAmount(float fineAmount) {
+        this.fineAmount = fineAmount;
     }
 
     public String getVehiclePlateNumber() {
@@ -101,8 +112,32 @@ public class Ticket {
         this.officer = officer;
     }
 
-   // Methods
-public boolean payTicket() {
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public Date getCourtDate() {
+        return courtDate;
+    }
+
+    public void setCourtDate(Date courtDate) {
+        this.courtDate = courtDate;
+    }
+
+    // Methods
+    public boolean payTicket() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Your ticket number is " + ticketNumber);
@@ -111,45 +146,47 @@ public boolean payTicket() {
 
         double payment = scanner.nextDouble();
 
-    if (payment < fineAmount) {
-            fineAmount -= payment; // Reduce balance
+        if (payment < fineAmount) {
+            fineAmount -= payment; 
             System.out.println("Payment accepted. Ticket still unpaid. Remaining balance: $" + fineAmount);
-            return false; // Ticket is still unpaid
+            return false; 
         } else {
             fineAmount = 0;
-            status = "Paid"; // Mark ticket as fully paid
+            status = "Paid"; 
             System.out.println("Payment accepted. Ticket paid in full.");
-            return true; // Ticket is fully paid
-}
+            return true; 
+        }
+    }
 
-    // 2. Check the ticket status
+    // Check the ticket status
     public void checkTicketStatus() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
         System.out.println("Ticket Status for " + ticketNumber + ":");
         System.out.println("Status: " + status);
         if ("Unpaid".equalsIgnoreCase(status) && dueDate.before(new Date())) {
             System.out.println("The ticket is overdue.");
             if (courtDate != null) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 System.out.println("Court Date: " + dateFormat.format(courtDate));
             }
         } else if ("Unpaid".equalsIgnoreCase(status)) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             System.out.println("Due Date: " + dateFormat.format(dueDate));
         }
     }
 
-    // 3. Issue the ticket
-    public static Ticket issueTicket(String ticketNumber, String offenceCode, String description, double fineAmount, Date issueDate, int dueInDays) {
+    // Issue the ticket
+    public static Ticket issueTicket(String ticketNumber, String offenceCode, String description, float fineAmount, Date issueDate, int dueInDays) {
         Date dueDate = new Date(issueDate.getTime() + (dueInDays * 24L * 60L * 60L * 1000L)); // Calculate due date
-        return new Ticket(ticketNumber, offenceCode, description, fineAmount, issueDate, dueDate);
+        return new Ticket(ticketNumber, issueDate, offenceCode, description, fineAmount, "ABC123", null, null, dueDate);
     }
 
     // Display ticket details
     public void displayTicketDetails() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
         System.out.println("Ticket Number: " + ticketNumber);
         System.out.println("Offence Code: " + offenceCode);
-        System.out.println("Description: " + description);
+        System.out.println("Description: " + offenceDescription);
         System.out.println("Fine Amount: $" + fineAmount);
         System.out.println("Issue Date: " + dateFormat.format(issueDate));
         System.out.println("Due Date: " + dateFormat.format(dueDate));
