@@ -102,6 +102,15 @@ public class Ticket {
     }
 
    // Methods
+public boolean payTicket() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Your ticket number is " + ticketNumber);
+        System.out.println("Fine Amount: $" + fineAmount);
+        System.out.print("How much do you want to pay? ");
+
+        double payment = scanner.nextDouble();
+
     if (payment < fineAmount) {
             fineAmount -= payment; // Reduce balance
             System.out.println("Payment accepted. Ticket still unpaid. Remaining balance: $" + fineAmount);
