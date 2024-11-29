@@ -111,22 +111,17 @@ public class Driver extends User {
                 String paymentChoice = scanner.nextLine());
 
                 if (paymentChoice.equals("yes")) {
-              private static void makePayment(Ticket ticket, Scanner scanner) {
-   		 if (ticket != null && !ticket.isPaid()) {
-       			 System.out.println("Enter cardholder's name: ");
-       			 String cardHolderName = scanner.nextLine();
-       			 System.out.println("Enter account number: ");
-       			 String accountNumber = scanner.nextLine();
-        		 System.out.println("Enter expiry month (MM): ");
-        		 String expiryMonth = scanner.nextLine();
-        		 System.out.println("Enter expiry year (YYYY): ");
-        		 String expiryYear = scanner.nextLine();
+             	private void makePayment(Scanner scanner) {
+    		System.out.println("Enter ticket number to pay:");
+    		String ticketNumber = scanner.nextLine();
 
-        // Simulate payment
-        System.out.println("Payment Successful for " + cardHolderName + "! Fine of $" + ticket.getFineAmount() + " has been paid.");
-        ticket.setPaid(true);  // Mark ticket as paid
-                    ticket.setPaid(true);
-                    System.out.println("Payment successful! Fine has been paid.");
+    		for (Ticket ticket : outstandingTickets) {
+        	if (ticket.getTicketNumber().equals(ticketNumber)) {
+           	 ticket.payTicket();
+            	outstandingTickets.remove(ticket);
+        
+                System.out.println("Payment successful! Fine has been paid.");
+		break;
                 } else {
                     System.out.println("You chose not to pay the fine at this time.");
                 }
