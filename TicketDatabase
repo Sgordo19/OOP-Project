@@ -1,0 +1,107 @@
+import java.io.*;
+import java.util.*;
+
+public class TicketDatabase {
+
+    private static final String FILE_NAME = "tickets.txt"; // File where ticket data will be stored
+    private List<Ticket> tickets; // List to hold tickets in memory
+
+    public TicketDatabase() {
+        tickets = new ArrayList<>();
+        loadTicketsFromFile();  
+    }
+
+    private void loadTicketsFromFile() {
+        List<String> lines = readFile(FILE_NAME);  // Read raw data from file
+        for (String line : lines) {
+            Ticket ticket = Ticket.fromCSV(line);  // Convert line into a Ticket object
+            tickets.add(ticket);
+        }
+    }
+
+    // Encapsulated method for saving tickets to the file
+    private void saveTicketsToFile() {
+        List<String> lines = new ArrayList<>();
+        for (Ticket ticket : tickets) {
+            lines.add(ticket.toCSV());  // Convert Ticket objects to CSV format
+        }
+        writeFile(FILE_NAME, lines);  // Write the list of lines to the file
+    }
+
+    // Method to add a ticket to the database
+    public void addTicket(Ticket ticket) {
+        tickets.add(ticket);
+        saveTicketsToFile();  // Save the updated list to the file
+    }
+
+    // Method to find tickets by TRN
+    public List<Ticket> findTicketsByTrn(String trn) {
+        List<Ticket> result = new ArrayList<>();
+        for (Ticket ticket : tickets) {
+            if (ticket.getTrn().equals(trn)) {
+                result.add(ticket);
+            }
+        }
+        return result;
+    }
+
+    // Method to get all tickets in the database
+    public List<Ticket> getAllTickets() {
+        return new ArrayList<>(tickets);  // Return a copy to maintain encapsulation
+    }
+
+    // Method to remove a ticket from the database
+    public boolean removeTicket(Ticket ticket) {
+        boolean removed = tickets.remove(ticket);
+        if (removed) {
+            saveTicketsToFile();  // Save the updated list to the file
+        }
+        return removed;
+    }
+
+    // Helper method to display all tickets
+    public void displayAllTickets() {
+        if (tickets.isEmpty()) {
+            System.out.println("No tickets available.");
+        } else {
+            for (Ticket ticket : tickets) {
+                System.out.println(ticket);
+            }
+        }
+    }
+
+    // Helper method to display tickets by TRN
+    public void displayTicketsByTrn(String trn) {
+        List<Ticket> result = findTicketsByTrn(trn);
+        if (result.isEmpty()) {
+            System.out.println("No tickets found for TRN: " + trn);
+        } else {
+            for (Ticket ticket : result) {
+                System.out.println(ticket);
+            }
+        }
+    }
+
+    // Method to read the file into a list of strings (abstracts file reading)
+    private List<String> readFile(String fileName) {
+        List<String> lines = new ArrayList<>();
+        try (Scanner scanner = new Scanner(new File(fileName))) {
+            while (scanner.hasNextLine()) {
+                lines.add(scanner.nextLine());
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found);
+        }
+    }
+
+    //  Method to write a list of strings to the file (abstracts file writing)
+    private void writeFile(String fileName, List<String> lines) {
+        try (FileWriter writer = new FileWriter(fileName, false)) { // Overwrite the file if it exists
+            for (String line : lines) {
+                writer.write(line + "\n");  // Write each line followed by a newline character
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving tickets to file: " + e.getMessage());
+        }
+    }
+}
