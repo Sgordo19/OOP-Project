@@ -75,6 +75,26 @@ public class PoliceRecord {
         return accidentHistory;
     }
 
+    
+    public boolean processTickets() {
+        // Check if there are no outstanding tickets
+        if (outstandingTickets == null || outstandingTickets.size() < 1) {
+            System.out.println("No outstanding tickets for " + offenderName);
+            return false; // No tickets to process
+        } else {
+            // Iterate through each ticket in the list
+            for (Ticket ticket : outstandingTickets) {
+                if (ticket.isOverdue()) {
+                    // If the ticket is overdue, print it out
+                    System.out.println("Ticket is overdue: " + ticket);
+                } else {
+                    // If the ticket is not overdue, print it out
+                    System.out.println("Ticket is still within due date: " + ticket);
+                }
+            }
+            return true; // Tickets were processed
+        }
+    }
     public boolean hasAccidentInLastTwoYears() {
         // Check if the offender has an accident within the last two years
         for (Accident accident : accidentHistory) {
