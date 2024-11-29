@@ -101,11 +101,52 @@ public class Ticket {
         this.officer = officer;
     }
 
-    // toString method for displaying ticket info
-    @Override
-    public String toString() {
-        return "Ticket Number: " + ticketnumber + ", Issue Date: " + issuedate + ", Offence Code: " + offencecode + 
-               ", Offence Description: " + offencedescription + ", Fine Amount: " + fineamount + 
-               ", Vehicle Plate Number: " + vehiclePlateNumber + ", Driver: " + driver + ", Officer: " + officer;
+   // Methods
+    // 1. Pay the ticket
+    public void payTicket() {
+        if ("Paid".equalsIgnoreCase(this.status)) {
+            System.out.println("Ticket already paid.");
+        } else {
+            this.status = "Paid";
+            System.out.println("Ticket " + this.ticketNumber + " has been successfully paid.");
+        }
+    }
+
+    // 2. Check the ticket status
+    public void checkTicketStatus() {
+        System.out.println("Ticket Status for " + ticketNumber + ":");
+        System.out.println("Status: " + status);
+        if ("Unpaid".equalsIgnoreCase(status) && dueDate.before(new Date())) {
+            System.out.println("The ticket is overdue.");
+            if (courtDate != null) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                System.out.println("Court Date: " + dateFormat.format(courtDate));
+            }
+        } else if ("Unpaid".equalsIgnoreCase(status)) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            System.out.println("Due Date: " + dateFormat.format(dueDate));
+        }
+    }
+
+    // 3. Issue the ticket
+    public static Ticket issueTicket(String ticketNumber, String offenceCode, String description, double fineAmount, Date issueDate, int dueInDays) {
+        Date dueDate = new Date(issueDate.getTime() + (dueInDays * 24L * 60L * 60L * 1000L)); // Calculate due date
+        return new Ticket(ticketNumber, offenceCode, description, fineAmount, issueDate, dueDate);
+    }
+
+    // Display ticket details
+    public void displayTicketDetails() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        System.out.println("Ticket Number: " + ticketNumber);
+        System.out.println("Offence Code: " + offenceCode);
+        System.out.println("Description: " + description);
+        System.out.println("Fine Amount: $" + fineAmount);
+        System.out.println("Issue Date: " + dateFormat.format(issueDate));
+        System.out.println("Due Date: " + dateFormat.format(dueDate));
+        System.out.println("Status: " + status);
+        if (courtDate != null) {
+            System.out.println("Court Date: " + dateFormat.format(courtDate));
+        }
+        System.out.println("---------------------------");
     }
 }
