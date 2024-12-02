@@ -5,6 +5,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in); //Scanner object to read user input
         boolean exitSystem = false; //Controls when the main loop ends
+        boolean inSystem;
 
         
         while (!exitSystem) // Continues loop until exitSystem is set to true
@@ -34,6 +35,7 @@ public class Main {
                         System.out.println("Login successful. Welcome, Processing Officer!");
                         //// Call officer menu if login is successful
                         officerMenu(scanner);
+                        inSystem = true;
                     } else {
                         // If credentials are incorrect, show an error message
                         System.out.println("Invalid username or password. Access denied.");
