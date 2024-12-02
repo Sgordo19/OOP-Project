@@ -56,7 +56,73 @@ public Boolean getNegativePoliceRecords() {
 public void setNegativePoliceRecords(Boolean negativePoliceRecords) {
 	this.negativePoliceRecords = negativePoliceRecords;
 }
+ // Method to search for an applicant by TRN and display their information
+    public static void searchApplicant(String trn, Applicant[] applicants) {
+        boolean applicantFound = false;
 
+        // Search through the applicants array to find a match for the given TRN
+        for (Applicant applicant : applicants) {
+            if (applicant.getTrn().equals(trn)) {
+                applicantFound = true;
+                displayApplicantInfo(applicant);
+                displayTicketInfo(applicant);
+                displayPoliceRecordCheck(applicant);
+                displayApplicationStatus(applicant);
+                break;
+            }
+        }
+
+        if (!applicantFound) {
+            System.out.println("No applicant found with TRN: " + trn);
+        }
+    }
+
+    // Method to display the full applicant information
+    public static void displayApplicantInfo(Applicant applicant) {
+        System.out.println("Full Name: " + applicant.getName());
+        System.out.println("Date of Birth: " + applicant.getDob());
+        System.out.println("TRN: " + applicant.getTrn());
+        System.out.println("Address: " + applicant.getAddress());
+        System.out.println("Email: " + applicant.getEmail());
+        System.out.println("Contact Number: " + applicant.getContact_number());
+    }
+
+    // Method to display the ticket details of an applicant
+    public static void displayTicketInfo(Applicant applicant) {
+        int numberOfTickets = 0;
+        double totalAmountOwing = 0;
+
+        if (applicant.getTicket() != null) {
+            numberOfTickets++;
+            totalAmountOwing += applicant.getTicket().getAmount();
+            System.out.println("Number of Tickets: " + numberOfTickets);
+            System.out.println("Ticket Description: " + applicant.getTicket().getDescription());
+            System.out.println("Ticket Amount: $" + applicant.getTicket().getAmount());
+        }
+
+        System.out.println("Total Amount Owing: $" + totalAmountOwing);
+    }
+
+    // Method to display the police record check result
+    public static void displayPoliceRecordCheck(Applicant applicant) {
+        if (applicant.getNegativePoliceRecords()) {
+            System.out.println("Police Record Check: Denied");
+        } else {
+            System.out.println("Police Record Check: Approved");
+        }
+    }
+
+    // Method to check and display the application status (approved or denied)
+    public static void displayApplicationStatus(Applicant applicant) {
+        if (applicant.getAccidents() || applicant.getNegativePoliceRecords()) {
+            System.out.println("Application Denied based on the disqualification of the proposed driver.");
+            System.out.println("You have 5 to 10 business days to provide another driver.");
+            System.out.println("The application is therefore denied pending the change of driver and/or the full payment of the outstanding fees.");
+        } else {
+            System.out.println("Application Approved!");
+        }
+    }
+}
 @Override 
 public String toString () {
 	return "User's email is: " + email + "Number of ticket/s are:" + ticket + "Has the User met in any accidents?: " + accidents+ "What is the User's accident Reccord" + negativePoliceRecords +"\n";} 
