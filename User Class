@@ -1,84 +1,77 @@
 package Final_Project;
 
+import java.util.Scanner;
+import java.util.Arrays;
+
 public abstract class User {
-	protected String name;
-	protected String trn;
-	protected String dob;
-	protected String address;
-	protected String contact_number ;
-	
-	// Default Constructor
-	public User()
-	{
-		name = "";
-		trn = "";
-		dob = "";
-		address = "";
-		contact_number = "";
-	}
-	
-	public User(String name, String trn, String dob, String address, String contact_number)
-	{
-		this.name = name;
-		this.trn = trn;
-		this.dob = dob;
-		this.address = address;
-		this.contact_number = contact_number;
-	}
-	
-	public User(User use)
-	{
-		name = use.name;
-		trn = use.trn;
-		dob = use.dob;
-		address = use.address;
-		contact_number = use.contact_number;
-	}
+    protected String name;
+    protected String trn;
+    protected String dob;
+    protected String parish;
+    protected String contact_number;
 
-	public String getName() {
-		return name;
-	}
+    // List of valid parishes in Jamaica
+    private static final String[] VALID_PARISHES = {
+        "Kingston", "Saint Andrew", "Saint Thomas", "Portland", "Clarendon",
+        "Saint Catherine", "Manchester", "Saint Elizabeth", "Trelawny", "Saint James",
+        "Hanover", "Westmoreland", "St. Ann", "St. Mary", "St. David"
+    };
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    // Method to prompt the user to input the driver's information
+    public void inputUserInfo() {
+        Scanner scanner = new Scanner(System.in);
 
-	public String getTrn() {
-		return trn;
-	}
+        System.out.println("Enter Driver's Name:");
+        this.name = scanner.nextLine();
 
-	public void setTrn(String trn) {
-		this.trn = trn;
-	}
+        System.out.println("Enter Driver's TRN:");
+        this.trn = scanner.nextLine();
 
-	public String getDob() {
-		return dob;
-	}
+        System.out.println("Enter Driver's Date of Birth (e.g., 01/01/1980):");
+        this.dob = scanner.nextLine();
 
-	public void setDob(String dob) {
-		this.dob = dob;
-	}
+        // Prompt for a valid parish
+        this.parish = getValidParish(scanner);
 
-	public String getAddress() {
-		return address;
-	}
+        System.out.println("Enter Driver's Contact Number:");
+        this.contact_number = scanner.nextLine();
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    // Method to validate parish input
+    private String getValidParish(Scanner scanner) {
+        String parishInput = null;
+        boolean isValid = false;
+        
+        while (!isValid) {
+            System.out.println("Enter Driver's Parish (choose from: " + String.join(", ", VALID_PARISHES) + "):");
+            parishInput = scanner.nextLine();
+            if (Arrays.asList(VALID_PARISHES).contains(parishInput)) {
+                isValid = true;  // Parish is valid
+            } else {
+                System.out.println("Invalid parish. Please enter a valid parish from the list.");
+            }
+        }
+        return parishInput;
+    }
 
-	public String getContact_number() {
-		return contact_number;
-	}
+    // Getter methods
+    public String getName() {
+        return name;
+    }
 
-	public void setContact_number(String contact_number) {
-		this.contact_number = contact_number;
-	}
-	
-	@Override 
-	public String toString () {
-		return "User's name is: " + name + "User's Trn is:" + trn + "User's Date of Birth is: " + dob + "User's address is" + address + "The user's address is:" + address + "\n";} 
+    public String getTrn() {
+        return trn;
+    }
 
-	}
-	
+    public String getDob() {
+        return dob;
+    }
+
+    public String getParish() {
+        return parish;
+    }
+
+    public String getContactNumber() {
+        return contact_number;
+    }
 }
