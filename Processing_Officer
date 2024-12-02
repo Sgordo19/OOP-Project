@@ -22,11 +22,24 @@ public class Processing_Officer extends User{
 	public void setOfficerID(String officerID) {
 		this.officerID = officerID;
 	}
+ // Method to view outstanding tickets based on TRN instead of parish
+    public static void viewOutstandingTicketsByTRN(Applicant applicant) {
+        Scanner scanner = new Scanner(System.in);
 
-    // Display officer's ID
-    @Override
-    public String toString() {
-        return "Processing Officer ID: " + officerID;
+        // Prompt user for TRN to filter by the applicant's TRN
+        System.out.println("Enter the TRN to view outstanding tickets:");
+        String trn = scanner.nextLine();
+
+        // Simulate checking if the TRN matches and if the applicant has any outstanding tickets
+        if (applicant.trn.equals(trn) && applicant.outstandingTickets) {
+            System.out.println("\n--- Outstanding Tickets for TRN: " + trn + " ---");
+            System.out.println("There are outstanding tickets that need to be paid before your application can be processed.");
+        } else if (applicant.trn.equals(trn) && !applicant.outstandingTickets) {
+            System.out.println("\n--- Outstanding Tickets for TRN: " + trn + " ---");
+            System.out.println("There are no outstanding tickets for this TRN.");
+        } else {
+            System.out.println("No records found for TRN: " + trn);
+        }
     }
-
 }
+   
