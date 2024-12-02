@@ -92,7 +92,8 @@ public void setNegativePoliceRecords(Boolean negativePoliceRecords) {
         int numberOfTickets = 0;
         double totalAmountOwing = 0;
 
-        if (applicant.getTicket() != null) {
+        if (applicant.getTicket() != null) 
+	{
             numberOfTickets++;
             totalAmountOwing += applicant.getTicket().getAmount();
             System.out.println("Number of Tickets: " + numberOfTickets);
@@ -104,13 +105,16 @@ public void setNegativePoliceRecords(Boolean negativePoliceRecords) {
     }
 
     // Method to display the police record check result
-    public static void displayPoliceRecordCheck(Applicant applicant) {
-        if (applicant.getNegativePoliceRecords()) {
+    public static void displayPoliceRecordCheck(Applicant applicant)
+	{
+        if (applicant.getNegativePoliceRecords()) 
+	{
             System.out.println("Police Record Check: Denied");
-        } else {
+        } else 
+	{
             System.out.println("Police Record Check: Approved");
-        }
-    }
+        } 
+	}
 
     // Method to check and display the application status (approved or denied)
     public static void displayApplicationStatus(Applicant applicant) {
@@ -122,8 +126,4 @@ public void setNegativePoliceRecords(Boolean negativePoliceRecords) {
             System.out.println("Application Approved!");
         }
     }
-}
-@Override 
-public String toString () {
-	return "User's email is: " + email + "Number of ticket/s are:" + ticket + "Has the User met in any accidents?: " + accidents+ "What is the User's accident Reccord" + negativePoliceRecords +"\n";} 
 }
