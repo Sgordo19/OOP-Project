@@ -17,21 +17,22 @@ public class Ticket {
     private Date courtDate;
 
     // Constructor
-    public Ticket(String ticketNumber, Date issueDate, String offenceCode, String offenceDescription,
-                  double fineAmount, String vehiclePlateNumber, Driver driver, JCF_Officer officer,
-                  String status, Date dueDate, Date courtDate) {
-        this.ticketNumber = ticketNumber;
-        this.offenceCode = offenceCode;
-        this.offenceDescription = offenceDescription;
-        this.fineAmount = fineAmount;
-        this.issueDate = issueDate;
-        this.dueDate = dueDate;
-        this.status = "Unpaid"; // Default status
-        this.courtDate = courtDate; // Default court date (null if not escalated)
-        this.driver = driver;
-        this.officer = officer;
-        this.vehiclePlateNumber = vehiclePlateNumber;
-    }
+    public Ticket(String ticketNumber, Date issueDate, String offenceCode, String offenceDescription, 
+            double fineAmount, String vehiclePlateNumber, Driver driver, JCF_Officer officer, 
+            String status, Date dueDate, Date courtDate) {
+  this.ticketNumber = ticketNumber;
+  this.issueDate = issueDate;
+  this.offenceCode = offenceCode;
+  this.offenceDescription = offenceDescription;
+  this.fineAmount = fineAmount;
+  this.vehiclePlateNumber = vehiclePlateNumber;
+  this.driver = driver;
+  this.officer = officer;
+  this.status = status;
+  this.dueDate = dueDate;
+  this.courtDate = courtDate;
+}
+
 
     // Copy Constructor
     public Ticket(Ticket tick) {
@@ -198,7 +199,7 @@ public class Ticket {
         System.out.println("---------------------------");
     }
 
-
+    // New Methods
 
     // Method to check if a ticket is outstanding (Unpaid and overdue)
     public boolean checkOutstandingTickets() {
@@ -226,6 +227,6 @@ public class Ticket {
         Date dueDate = new Date(issueDate.getTime() + (dueInDays * 24L * 60L * 60L * 1000L));
         // Return a new Ticket with the correct parameters
         return new Ticket(ticketNumber, issueDate, offenceCode, offenceDescription, fineAmount,
-                driver.promptForVehiclePlateNumber(null), driver, officer, status, dueDate, courtDate);
+                driver.promptForVehiclePlateNumber(), driver, officer, status, dueDate, courtDate);
     }
 }
