@@ -1,123 +1,168 @@
 package Final_Project;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class PoliceRecord {
-    private String offenderName;
-    private String offenderTRN;
-    private String offenderAddress;
-    private String offenderContactNumber;
-    private List<Ticket> outstandingTickets;
-    private List<Accident> accidentHistory;
+    private static final String FILE_NAME = "tickets.txt";
+    private Ticket[] currentTickets; // Array to hold tickets
+    private int ticketCount; // Tracks the number of tickets in the array
 
     // Constructor
-    public PoliceRecord(String offenderName, String offenderTRN, String offenderAddress, String offenderContactNumber) {
-        this.offenderName = offenderName;
-        this.offenderTRN = offenderTRN;
-        this.offenderAddress = offenderAddress;
-        this.offenderContactNumber = offenderContactNumber;
-        this.outstandingTickets = new ArrayList<>();
-        this.accidentHistory = new ArrayList<>();
+    public PoliceRecord(int maxTickets) {
+        this.currentTickets = new Ticket[maxTickets];
+        this.ticketCount = 0;
     }
 
-    // Getters and Setters
-    public String getOffenderName() {
-        return offenderName;
+    // Method to load tickets from a file
+    /*public void loadTickets() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            while ((line = reader.readLine()) != null && ticketCount < currentTickets.length) {
+                String[] data = line.split(",");
+                String ticketNumber = data[0];
+                Date issueDate = dateFormat.parse(data[1]);
+                String offenceCode = data[2];
+                String offenceDescription = data[3];
+                float fineAmount = Float.parseFloat(data[4]);
+                String vehiclePlateNumber = data[5];
+                String status = data[6];
+                Date dueDate = dateFormat.parse(data[7]);
+
+                currentTickets[ticketCount++] = new Ticket(ticketNumber, issueDate, offenceCode, offenceDescription,
+                        fineAmount, vehiclePlateNumber, driver, officer,status, dueDate, courtDate);
+            }
+        } catch (Exception e) {
+            System.out.println("Error loading tickets: " + e.getMessage());
+        }
+    } */
+
+    // Method to save tickets to a file
+    public void saveTickets() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
+            for (int i = 0; i < ticketCount; i++) {
+                Ticket ticket = currentTickets[i];
+                writer.write(ticket.getTicketNumber() + "," +
+                             dateFormat.format(ticket.getIssueDate()) + "," +
+                             ticket.getOffenceCode() + "," +
+                             ticket.getOffenceDescription() + "," +
+                             ticket.getFineAmount() + "," +
+                             ticket.getVehiclePlateNumber() + "," +
+                             ticket.getStatus() + "," +
+                             dateFormat.format(ticket.getDueDate()));
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving tickets: " + e.getMessage());
+        }
     }
 
-    public void setOffenderName(String offenderName) {
-        this.offenderName = offenderName;
+    // Method to check outstanding tickets
+    public void checkOutstandingTickets() {
+        boolean hasOutstandingTickets = false;
+
+        System.out.println("Outstanding Tickets:");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        for (int i = 0; i < ticketCount; i++) {
+            Ticket ticket = currentTickets[i];
+            if (ticket.getStatus().equals("Unpaid")) {
+                System.out.println("Ticket Number: " + ticket.getTicketNumber());
+                System.out.println("Issue Date: " + dateFormat.format(ticket.getIssueDate()));
+                System.out.println("Fine Amount: $" + ticket.getFineAmount());
+                System.out.println("Due Date: " + dateFormat.format(ticket.getDueDate()));
+                System.out.println("-----------");
+                hasOutstandingTickets = true;
+            }
+        }
+
+        if (!hasOutstandingTickets) {
+            System.out.println("No outstanding tickets.");
+        }
     }
 
-    public String getOffenderTRN() {
-        return offenderTRN;
+    // Method to check for outstanding warrants (Placeholder check)
+    public boolean hasOutstandingWarrant(String driverTRN) {
+        return driverTRN.equals("TRN123456");
     }
 
-    public void setOffenderTRN(String offenderTRN) {
-        this.offenderTRN = offenderTRN;
+    // Method to check due dates for unpaid tickets
+    public void checkDueDateForPayment() {
+        boolean hasUnpaidTickets = false;
+
+        System.out.println("Due Dates for Unpaid Tickets:");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        for (int i = 0; i < ticketCount; i++) {
+            Ticket ticket = currentTickets[i];
+            if (ticket.getStatus().equals("Unpaid")) {
+                System.out.println("Ticket Number: " + ticket.getTicketNumber());
+                System.out.println("Due Date: " + dateFormat.format(ticket.getDueDate()));
+                System.out.println("-----------");
+                hasUnpaidTickets = true;
+            }
+        }
+
+        if (!hasUnpaidTickets) {
+            System.out.println("No unpaid tickets.");
+        }
     }
 
-    public String getOffenderAddress() {
-        return offenderAddress;
+    // Method to view paid tickets
+    public void viewPaidTickets() {
+        boolean hasPaidTickets = false;
+
+        System.out.println("Paid Tickets:");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        for (int i = 0; i < ticketCount; i++) {
+            Ticket ticket = currentTickets[i];
+            if (ticket.getStatus().equals("Paid")) {
+                System.out.println("Ticket Number: " + ticket.getTicketNumber());
+                System.out.println("Fine Amount: $" + ticket.getFineAmount());
+                System.out.println("Paid on: " + dateFormat.format(ticket.getDueDate()));
+                System.out.println("-----------");
+                hasPaidTickets = true;
+            }
+        }
+
+        if (!hasPaidTickets) {
+            System.out.println("No paid tickets.");
+        }
     }
 
-    public void setOffenderAddress(String offenderAddress) {
-        this.offenderAddress = offenderAddress;
-    }
+    // Method to pay for a ticket online (if not overdue)
+    public void payForTicket(String ticketNumber, double amount) {
+        boolean ticketFound = false;
 
-    public String getOffenderContactNumber() {
-        return offenderContactNumber;
-    }
-
-    public void setOffenderContactNumber(String offenderContactNumber) {
-        this.offenderContactNumber = offenderContactNumber;
-    }
-
-    // Methods to manage tickets
-    public void addTicket(Ticket ticket) {
-        outstandingTickets.add(ticket);
-    }
-
-    public List<Ticket> getOutstandingTickets() {
-        return outstandingTickets;
-    }
-
-    public void removeTicket(Ticket ticket) {
-        outstandingTickets.remove(ticket);
-    }
-
-    // Methods to manage accident history
-    public void addAccident(Accident accident) {
-        accidentHistory.add(accident);
-    }
-
-    public List<Accident> getAccidentHistory() {
-        return accidentHistory;
-    }
-
-    
-    public boolean processTickets() {
-        // Check if there are no outstanding tickets
-        if (outstandingTickets == null || outstandingTickets.size() < 1) {
-            System.out.println("No outstanding tickets for " + offenderName);
-            return false; // No tickets to process
-        } else {
-            // Iterate through each ticket in the list
-            for (Ticket ticket : outstandingTickets) {
-                if (ticket.isOverdue()) {
-                    // If the ticket is overdue, print it out
-                    System.out.println("Ticket is overdue: " + ticket);
+        for (int i = 0; i < ticketCount; i++) {
+            Ticket ticket = currentTickets[i];
+            if (ticket.getTicketNumber().equals(ticketNumber) && ticket.getStatus().equals("Unpaid")) {
+                if (ticket.getDueDate().after(new Date())) { // Check if not overdue
+                    if (amount >= ticket.getFineAmount()) {
+                        ticket.setFineAmount(0);
+                        ticket.setStatus("Paid");
+                        System.out.println("Payment successful for ticket: " + ticketNumber);
+                        ticketFound = true;
+                    } else {
+                        System.out.println("Insufficient payment. Remaining balance: $" + (ticket.getFineAmount() - amount));
+                        ticketFound = true;
+                    }
                 } else {
-                    // If the ticket is not overdue, print it out
-                    System.out.println("Ticket is still within due date: " + ticket);
+                    System.out.println("The ticket is overdue and cannot be paid online.");
+                    ticketFound = true;
                 }
-            }
-            return true; // Tickets were processed
-        }
-    }
-    public boolean hasAccidentInLastTwoYears() {
-        // Check if the offender has an accident within the last two years
-        for (Accident accident : accidentHistory) {
-            if (accident.isWithinLastTwoYears()) {
-                return true;
+                break;
             }
         }
-        return false;
-    }
 
-    // Utility Method to check outstanding tickets
-    public boolean hasOutstandingTickets() {
-        return !outstandingTickets.isEmpty();
-    }
-
-    // Override toString method for a detailed report
-    @Override
-    public String toString() {
-        return "Offender: " + offenderName + "\n" +
-               "TRN: " + offenderTRN + "\n" +
-               "Address: " + offenderAddress + "\n" +
-               "Contact: " + offenderContactNumber + "\n" +
-               "Outstanding Tickets: " + outstandingTickets.size() + "\n" +
-               "Accident History: " + accidentHistory.size();
+        if (!ticketFound) {
+            System.out.println("Ticket not found or already paid.");
+        }
     }
 }
