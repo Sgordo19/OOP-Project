@@ -1,45 +1,79 @@
 package Final_Project;
 
-public class Processing_Officer extends User{
-	private String officerID;
+public class Processing_Officer extends User {
+    private String officerID;
+    private Ticket[] currentTickets; // Using an array to store tickets
+    private int ticketCount; // To track the number of tickets in the array
 
-	private Processing_Officer (String name, String trn, String dob, String address, String contact_number, String officerID)
-	{
-		super(name,trn,dob,address,contact_number);
-		this.officerID = officerID;
-	}
-	
-	public Processing_Officer (Processing_Officer pro)
-	{
-		super (pro);
-		officerID = pro.officerID;
-	}
+    // Constructor
+    public Processing_Officer(String name, String trn, String dob, String address, String contactNumber, String officerID, int maxTickets) {
+        super();
+        this.officerID = officerID;
+        this.currentTickets = new Ticket[maxTickets]; // Initialize the array with a fixed size
+        this.ticketCount = 0; // Initially, no tickets
+    }
 
-	public String getOfficerID() {
-		return officerID;
-	}
+    // Copy Constructor
+    public Processing_Officer(Processing_Officer pro) {
+        super();
+        this.officerID = pro.officerID;
+        this.currentTickets = pro.currentTickets.clone(); // Clone the ticket array
+        this.ticketCount = pro.ticketCount;
+    }
 
-	public void setOfficerID(String officerID) {
-		this.officerID = officerID;
-	}
- // Method to view outstanding tickets based on TRN instead of parish
-    public static void viewOutstandingTicketsByTRN(Applicant applicant) {
-        Scanner scanner = new Scanner(System.in);
+    // Getter and Setter for officerID
+    public String getOfficerID() {
+        return officerID;
+    }
 
-        // Prompt user for TRN to filter by the applicant's TRN
-        System.out.println("Enter the TRN to view outstanding tickets:");
-        String trn = scanner.nextLine();
+    public void setOfficerID(String officerID) {
+        this.officerID = officerID;
+    }
 
-        // Simulate checking if the TRN matches and if the applicant has any outstanding tickets
-        if (applicant.trn.equals(trn) && applicant.outstandingTickets) {
-            System.out.println("\n--- Outstanding Tickets for TRN: " + trn + " ---");
-            System.out.println("There are outstanding tickets that need to be paid before your application can be processed.");
-        } else if (applicant.trn.equals(trn) && !applicant.outstandingTickets) {
-            System.out.println("\n--- Outstanding Tickets for TRN: " + trn + " ---");
-            System.out.println("There are no outstanding tickets for this TRN.");
+    // Add a ticket to the array
+    public boolean addTicket(Ticket ticket) {
+        if (ticketCount < currentTickets.length) {
+            currentTickets[ticketCount++] = ticket; // Add ticket and increment count
+            return true;
         } else {
-            System.out.println("No records found for TRN: " + trn);
+            System.out.println("No space to add more tickets.");
+            return false;
+        }
+    }
+
+    // View outstanding tickets based on TRN
+    public void viewTicketsByTrn(String trn) {
+        boolean hasOutstandingTickets = false;
+        System.out.println("\n--- Outstanding Tickets for TRN: " + trn + " ---");
+
+        for (Ticket ticket : currentTickets) {
+            if (ticket != null && ticket.getDriver().getTrn().equalsIgnoreCase(trn) && 
+                ticket.getStatus().equalsIgnoreCase("Unpaid")) {
+                System.out.println(ticket); // Ensure Ticket has a toString method for details
+                hasOutstandingTickets = true;
+            }
+        }
+
+        if (!hasOutstandingTickets) {
+            System.out.println("There are no outstanding tickets for this TRN.");
+        }
+    }
+
+    // View outstanding tickets for a specific parish
+    public void viewTicketsByParish(String parish) {
+        boolean found = false;
+        System.out.println("\n--- Outstanding Tickets in " + parish + " ---");
+
+        for (Ticket ticket : currentTickets) {
+            if (ticket != null && ticket.getStatus().equalsIgnoreCase("Unpaid") && 
+                ticket.getDriver().getParish().equalsIgnoreCase(parish)) {
+                System.out.println(ticket); // Ensure Ticket has a toString method for details
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No outstanding tickets found in " + parish + ".");
         }
     }
 }
-   
