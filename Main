@@ -15,7 +15,7 @@ public class main {
             System.out.println("\n--- Ticket Issuing and Offender Checking System (TIOCS) ---");
             System.out.println("1. Officer Login");
             System.out.println("2. Driver Menu");
-            System.out.println("2. JCF Officer Menu");
+            System.out.println("3. JCF Officer Menu");
             System.out.println("4. Exit");
 
             System.out.print("Enter your choice: ");
@@ -48,9 +48,9 @@ public class main {
                     System.out.println("Enter Officer Password:");
                     String password1 = scanner.nextLine();
 
-                    if (username1.equals("admin") && password1.equals("password123")) {
+                    if (username1.equals("Police") && password1.equals("password1234")) {
                         System.out.println("Login successful. Welcome, JCF_Officer!");
-                        officerMenu(scanner);
+                        JCF_Officer.jcfOfficerMenu(scanner, null, choice, null);
                     } else {
                         System.out.println("Invalid username or password. Access denied.");
                     }
