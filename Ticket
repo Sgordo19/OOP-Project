@@ -2,7 +2,6 @@ package Final_Project;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.util.Scanner;
 
 public class Ticket {
     private String ticketNumber;
@@ -10,7 +9,7 @@ public class Ticket {
     private String offenceDescription;
     private double fineAmount;
     private String vehiclePlateNumber;
-    private Driver driver;
+    private Driver driver = null;
     private JCF_Officer officer;
     private String status; // "Paid" or "Unpaid"
     private Date issueDate;
@@ -19,8 +18,8 @@ public class Ticket {
 
     // Constructor
     public Ticket(String ticketNumber, Date issueDate, String offenceCode, String offenceDescription,
-            float fineAmount, String vehiclePlateNumber, Driver driver, JCF_Officer officer,
-            String status, Date dueDate, Date courtDate)  {
+                  double fineAmount, String vehiclePlateNumber, Driver driver, JCF_Officer officer,
+                  String status, Date dueDate, Date courtDate) {
         this.ticketNumber = ticketNumber;
         this.offenceCode = offenceCode;
         this.offenceDescription = offenceDescription;
@@ -28,79 +27,140 @@ public class Ticket {
         this.issueDate = issueDate;
         this.dueDate = dueDate;
         this.status = "Unpaid"; // Default status
-        this.courtDate = null; // Default court date (null if not escalated)
+        this.courtDate = courtDate; // Default court date (null if not escalated)
         this.driver = driver;
         this.officer = officer;
-        this.vehiclePlateNumber = driver.getVehiclePlateNumber(); // Getting the vehicle plate number from Driver class
-    }
-
-    // Getter and Setter methods
-    public String getTicketNumber() {
-        return ticketNumber;
-    }
-
-    public String getOffenceCode() {
-        return offenceCode;
-    }
-
-    public String getOffenceDescription() {
-        return offenceDescription;
-    }
-
-    public double getFineAmount() {
-        return fineAmount;
-    }
-
-    public Date getIssueDate() {
-        return issueDate;
-    }
-
-    public Date getDueDate() {
-        return dueDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public Date getCourtDate() {
-        return courtDate;
-    }
-
-    public void setCourtDate(Date courtDate) {
-        this.courtDate = courtDate;
-    }
-
-    public Driver getDriver() {
-        return driver;
-    }
-
-    public void setDriver(Driver driver) {
-        this.driver = driver;
-    }
-
-    public JCF_Officer getOfficer() {
-        return officer;
-    }
-
-    public void setOfficer(JCF_Officer officer) {
-        this.officer = officer;
-    }
-
-    public String getVehiclePlateNumber() {
-        return vehiclePlateNumber;
-    }
-
-    public void setVehiclePlateNumber(String vehiclePlateNumber) {
         this.vehiclePlateNumber = vehiclePlateNumber;
     }
 
+    // Copy Constructor
+    public Ticket(Ticket tick) {
+
+    this.ticketNumber = tick.ticketNumber;
+    this.offenceCode = tick.offenceCode;
+    this.offenceDescription = tick.offenceDescription;
+    this.fineAmount = tick.fineAmount;
+    this.vehiclePlateNumber = tick.vehiclePlateNumber;
+    this.driver = tick.driver;  // Copy the driver reference (this assumes shallow copy; deep copy needed if Driver is mutable)
+    this.officer = tick.officer; // Assuming officer is also a reference object
+    }
     // Methods
 
-    // Pay the ticket
+    public String getTicketNumber() {
+		return ticketNumber;
+	}
+
+
+	public void setTicketNumber(String ticketNumber) {
+		this.ticketNumber = ticketNumber;
+	}
+
+
+	public String getOffenceCode() {
+		return offenceCode;
+	}
+
+
+	public void setOffenceCode(String offenceCode) {
+		this.offenceCode = offenceCode;
+	}
+
+
+	public String getOffenceDescription() {
+		return offenceDescription;
+	}
+
+
+	public void setOffenceDescription(String offenceDescription) {
+		this.offenceDescription = offenceDescription;
+	}
+
+
+	public double getFineAmount() {
+		return fineAmount;
+	}
+
+
+	public void setFineAmount(double fineAmount) {
+		this.fineAmount = fineAmount;
+	}
+
+
+	public String getVehiclePlateNumber() {
+		return vehiclePlateNumber;
+	}
+
+
+	public void setVehiclePlateNumber(String vehiclePlateNumber) {
+		this.vehiclePlateNumber = vehiclePlateNumber;
+	}
+
+
+	public Driver getDriver() {
+		return driver;
+	}
+
+
+	public void setDriver(Driver driver) {
+		this.driver = driver;
+	}
+
+
+	public JCF_Officer getOfficer() {
+		return officer;
+	}
+
+
+	public void setOfficer(JCF_Officer officer) {
+		this.officer = officer;
+	}
+
+
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
+	public Date getIssueDate() {
+		return issueDate;
+	}
+
+
+	public void setIssueDate(Date issueDate) {
+		this.issueDate = issueDate;
+	}
+
+
+	public Date getDueDate() {
+		return dueDate;
+	}
+
+
+	public void setDueDate(Date dueDate) {
+		this.dueDate = dueDate;
+	}
+
+
+	public Date getCourtDate() {
+		return courtDate;
+	}
+
+
+	public void setCourtDate(Date courtDate) {
+		this.courtDate = courtDate;
+	}
+
+
+	// Pay the ticket
     public void payTicket() {
         if ("Paid".equalsIgnoreCase(this.status)) {
             System.out.println("Ticket already paid.");
+            
         } else {
             this.status = "Paid";
             System.out.println("Ticket " + this.ticketNumber + " has been successfully paid.");
@@ -122,19 +182,6 @@ public class Ticket {
         }
     }
 
-    // Issue the ticket (static method to create a new ticket)
-    public static Ticket issueTicket(String ticketNumber, String offenceCode, String offenceDescription, 
-            float fineAmount, Date issueDate, Driver driver, JCF_Officer officer, 
-            int dueInDays, String status, Date courtDate) {
-// Calculate due date by adding the specified number of days to the issue date
-Date dueDate = new Date(issueDate.getTime() + (dueInDays * 24L * 60L * 60L * 1000L));
-
-// Return a new Ticket with the correct parameters
-return new Ticket(ticketNumber, issueDate, offenceCode, offenceDescription, fineAmount, 
- driver.getVehiclePlateNumber(), driver, officer, status, dueDate, courtDate);
-}
-
-
     // Display ticket details
     public void displayTicketDetails() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -151,22 +198,34 @@ return new Ticket(ticketNumber, issueDate, offenceCode, offenceDescription, fine
         System.out.println("---------------------------");
     }
 
-    // Pay ticket method (with additional logic if necessary)
-    public boolean payTicket(float paymentAmount) {
-        if ("Paid".equalsIgnoreCase(this.status)) {
-            System.out.println("Ticket already paid.");
-            return true;
-        }
 
-        if (paymentAmount < fineAmount) {
-            fineAmount -= paymentAmount;
-            System.out.println("Payment accepted. Remaining balance: $" + fineAmount);
-            return false;
-        } else {
-            fineAmount = 0;
-            status = "Paid";
-            System.out.println("Ticket fully paid.");
-            return true;
+
+    // Method to check if a ticket is outstanding (Unpaid and overdue)
+    public boolean checkOutstandingTickets() {
+        if ("Unpaid".equalsIgnoreCase(status) && dueDate.before(new Date())) {
+            System.out.println("Ticket " + ticketNumber + " is outstanding (Unpaid and overdue).");
+            return true; // Ticket is outstanding
         }
+        return false; // Ticket is not outstanding
+    }
+
+    // Method to check if a ticket is unpaid
+    public boolean unpaid() {
+        boolean isUnpaid = "Unpaid".equalsIgnoreCase(status);
+        if (isUnpaid) {
+            System.out.println("Ticket " + ticketNumber + " is unpaid.");
+        }
+        return isUnpaid;
+    }
+
+    // Static method to issue a ticket
+    public static Ticket issueTicket(String ticketNumber, String offenceCode, String offenceDescription,
+                                     double fineAmount, Date issueDate, Driver driver, JCF_Officer officer,
+                                     int dueInDays, String status, Date courtDate) {
+        // Calculate due date by adding the specified number of days to the issue date
+        Date dueDate = new Date(issueDate.getTime() + (dueInDays * 24L * 60L * 60L * 1000L));
+        // Return a new Ticket with the correct parameters
+        return new Ticket(ticketNumber, issueDate, offenceCode, offenceDescription, fineAmount,
+                driver.promptForVehiclePlateNumber(null), driver, officer, status, dueDate, courtDate);
     }
 }
