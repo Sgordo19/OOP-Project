@@ -1,6 +1,7 @@
 package Final_Project;
 
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.io.ObjectOutputStream;
 import java.io.FileInputStream;
@@ -21,7 +22,7 @@ public class JCF_Officer extends User {
 
     // Constructor
     public JCF_Officer() {
-        super();  // Placeholder constructor to initialize User fields
+    	super(getName(), trn, dob, parish, contact_number);
         this.badgeNumber = "";
         this.policeStation = "";
         this.currentTickets = new Ticket[maxTickets];  // Default size for currentTickets
@@ -57,7 +58,7 @@ public class JCF_Officer extends User {
         String[] validParishes = {
             "1. Kingston", "2. St. Andrew", "3. St. Thomas", "4. Portland", "5. St. Mary", 
             "6. St. Ann", "7. Trelawny", "8. St. James", "9. Hanover", "10. Westmoreland", 
-            "11. St. Elizabeth", "12. Manchester", "13. Clarendon", "14. St. Catherine"
+            "11. St. Elizabeth", "12. Manchester", "13. Clarendon", "14. St. Catherine", "Parish"
         };
 
         Scanner scanner = new Scanner(System.in);
@@ -262,7 +263,7 @@ public class JCF_Officer extends User {
             System.out.println("Name: " + topOffender.getName());
             System.out.println("TRN: " + topOffender.getTrn());
             System.out.println("Address: " + topOffender.getParish());
-            System.out.println("Contact: " + topOffender.getContactNumber());
+            System.out.println("Contact: " + topOffender.getContact_number());
             // Gender was not added //System.out.println("Gender: " + topOffender.gender());
             System.out.println("Number of Outstanding Tickets: " + maxTickets);
         } else {
@@ -280,7 +281,7 @@ public class JCF_Officer extends User {
             if (ticket != null && ticket.getStatus().equals("Unpaid")) {
                 Driver driver = ticket.getDriver();
                 System.out.println("Driver TRN: " + driver.getTrn());
-                System.out.println("Driver Name: " + driver.getDriverName());
+                System.out.println("Driver Name: " + driver.getName());
                 System.out.println("Driver Address: " + driver.getParish());
                 System.out.println("Ticket Number: " + ticket.getTicketNumber());
                 System.out.println("Ticket Issue Date: " + ticket.getIssueDate());
@@ -313,7 +314,7 @@ public class JCF_Officer extends User {
                 System.out.println("Ticket Issue Date: " + ticket.getIssueDate());
                 System.out.println("Ticket Due Date: " + ticket.getDueDate());
                 System.out.println("Driver TRN: " + driver.getTrn());
-                System.out.println("Driver Name: " + driver.getDriverName());
+                System.out.println("Driver Name: " + driver.getName());
                 System.out.println("Driver Address: " + driver.getParish());
                 System.out.println("------------------------------");
                 found = true;
@@ -340,7 +341,7 @@ public class JCF_Officer extends User {
     // Find driver by vehicle plate
     private Driver findDriverByPlate(String plateNumber) {
         for (int i = 0; i < driverCount; i++) {
-            if (drivers[i] != null && drivers[i].getVehiclePlateNumber().equalsIgnoreCase(plateNumber)) {
+            if (drivers[i] != null && drivers[i].promptForVehiclePlateNumber().equalsIgnoreCase(plateNumber)) {
                 return drivers[i];
             }
         }
@@ -406,7 +407,7 @@ public class JCF_Officer extends User {
         System.out.println("Fine Amount: " + ticket.getFineAmount());
         System.out.println("Offence Description: " + ticket.getOffenceDescription());
         System.out.println("Vehicle Plate Number: " + ticket.getVehiclePlateNumber());
-        System.out.println("Driver: " + ticket.getDriver().getDriverName());
+        System.out.println("Driver: " + ticket.getDriver().getName());
         System.out.println("Issue Date: " + ticket.getIssueDate());
         System.out.println("Due Date: " + ticket.getDueDate());
 
@@ -418,7 +419,7 @@ public class JCF_Officer extends User {
     }
 
     // Main Menu to interact with the officer
-    public static void main(String[] args) {
+    public void officerMenu() {
         Scanner scanner = new Scanner(System.in);
 
         // Create a JCF_Officer instance
@@ -429,11 +430,11 @@ public class JCF_Officer extends User {
 
         // Display collected user information
         System.out.println("Officer Information:");
-        System.out.println("Name: " + officer.name);
-        System.out.println("TRN: " + officer.trn);
-        System.out.println("Date of Birth: " + officer.dob);
-        System.out.println("Parish: " + officer.parish);
-        System.out.println("Contact Number: " + officer.contact_number);
+        System.out.println("Name: " + officer.getName());
+        System.out.println("TRN: " + officer.getTrn());
+        System.out.println("Date of Birth: " + officer.getDob());
+        System.out.println("Parish: " + officer.getParish());
+        System.out.println("Contact Number: " + officer.getContact_number());
 
         // Simple menu for interacting with the officer
         while (true) {
@@ -442,25 +443,34 @@ public class JCF_Officer extends User {
             System.out.println("2. Retrieve Ticket");
             System.out.println("3. Delete Ticket");
             System.out.println("4. Exit");
-            int choice = scanner.nextInt();
-            scanner.nextLine();  // Consume newline
+            System.out.print("Enter your choice: ");
 
-            switch (choice) {
-                case 1:
-                    officer.promptAndAddNewTicket();
-                    break;
-                case 2:
-                    // Method to retrieve ticket (to be implemented)
-                    break;
-                case 3:
-                    // Method to delete ticket (to be implemented)
-                    break;
-                case 4:
-                    System.exit(0);
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
+            try {
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+
+                switch (choice) {
+                    case 1:
+                        officer.promptAndAddNewTicket();
+                        break;
+                    case 2:
+                        System.out.println("Retrieve Ticket feature is not implemented yet.");
+                        break;
+                    case 3:
+                        System.out.println("Delete Ticket feature is not implemented yet.");
+                        break;
+                    case 4:
+                        System.out.println("Exiting...");
+                        scanner.close(); // Close scanner
+                        return; // Exit the method
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number between 1 and 4.");
+                scanner.nextLine(); // Clear invalid input
             }
         }
     }
+
 }
