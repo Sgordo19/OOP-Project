@@ -2,7 +2,6 @@ package Final_Project;
 
 import java.util.Scanner;
 
-
 public class Driver extends User {
     private Ticket[] currentTickets; // Array of Ticket objects
     private boolean warrants; // Boolean for warrants
@@ -21,8 +20,8 @@ public class Driver extends User {
     private Driver(Driver driver) {
         super(driver.getName(), driver.getTrn(), driver.getDob(), driver.getParish(), driver.getContact_number());
         // Deep copy of the tickets array to avoid shared reference issues
-        if (driver.currentTickets != null) {
-            this.currentTickets = new Ticket[driver.currentTickets.length];
+        if (driver.currentTickets == null) {
+        	 driver.currentTickets = new Ticket[10]; 
             for (int i = 0; i < driver.currentTickets.length; i++) {
                 if (driver.currentTickets[i] != null) {
                     this.currentTickets[i] = new Ticket(driver.currentTickets[i]); // Assuming Ticket has a copy constructor
@@ -144,19 +143,26 @@ public class Driver extends User {
     }
 
     public String promptForVehiclePlateNumber() {
-    	Scanner scanner = new Scanner(System.in);
+        // Create a Scanner instance to read input
+        Scanner scanner = new Scanner(System.in);
+
         System.out.print("Please enter the vehicle plate number: ");
-        String inputPlateNumber = scanner.nextLine();
+        String inputPlateNumber = scanner.nextLine();  // Use the scanner object to call nextLine()
 
         // Validate the input
         if (inputPlateNumber == null || inputPlateNumber.trim().isEmpty()) {
             System.out.println("Invalid input. Vehicle plate number cannot be empty.");
         } else {
-            this.vehiclePlateNumber = inputPlateNumber.trim();
+            this.vehiclePlateNumber = inputPlateNumber.trim();  // Store the plate number
             System.out.println("Vehicle plate number updated successfully: " + this.vehiclePlateNumber);
         }
+
+        // Optionally, close the scanner if no longer needed
+        scanner.close();
+        
         return inputPlateNumber;
     }
+
 
     // toString() method to print Driver's details
     @Override
