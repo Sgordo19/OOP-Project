@@ -1,32 +1,44 @@
+package Final_Project;
+
+import java.util.Scanner;
+
+
 public class Driver extends User {
-    private String outstandingTickets; // A Ticket object
-    private boolean Warrants; // A boolean value for Warrants
-    boolean exit = false;
-    
+    private Ticket[] currentTickets; // Array of Ticket objects
+    private boolean warrants; // Boolean for warrants
+    private boolean exit = false;
+    private String vehiclePlateNumber;
+
     // Constructor
-    public Driver(String name, String trn, String dob, String address, String contact_number, 
-                  String outstandingTickets, boolean Warrants) {
-        super(name, trn, dob, address, contact_number); // Calling the User constructor
-        this.outstandingTickets = outstandingTickets;
-        this.Warrants = Warrants;
+    public Driver(String name, String trn, String dob, String address, String contactNumber, 
+                  Ticket[] currentTickets, boolean warrants) {
+        super(name, trn, dob, address, contactNumber); // Call User constructor
+        this.currentTickets = currentTickets;
+        this.warrants = warrants;
     }
 
-    // Constructor for copying Driver object
-    private Driver(Driver Driv) {
-        super(Driv);
-        outstandingTickets = Driv.outstandingTickets;
-        Warrants = Driv.Warrants;
+    // Copy Constructor
+    private Driver(Driver driver) {
+        super(driver.getName(), driver.getTrn(), driver.getDob(), driver.getParish(), driver.getContact_number());
+        // Deep copy of the tickets array to avoid shared reference issues
+        if (driver.currentTickets != null) {
+            this.currentTickets = new Ticket[driver.currentTickets.length];
+            for (int i = 0; i < driver.currentTickets.length; i++) {
+                if (driver.currentTickets[i] != null) {
+                    this.currentTickets[i] = new Ticket(driver.currentTickets[i]); // Assuming Ticket has a copy constructor
+                }
+            }
+        }
+        this.warrants = driver.warrants;
     }
-// Driver Menu Method
-    private static void driverMenu(Scanner scanner) {
+
+    // Driver Menu Method
+    public void driverMenu(Scanner scanner) {
         System.out.println("Driver Menu: ");
         System.out.println("Please enter your TRN (Taxpayer Registration Number):");
         String trn = scanner.nextLine();
 
-        // Check if the TRN exists in the ticket database
-        Ticket ticket = Ticket.findTicketByTRN(trn);
-
-	 while (!exit) {
+        while (!exit) {
             System.out.println("\nDriver Menu:");
             System.out.println("Please select one of the following options (1-6):");
             System.out.println("1. Check all past tickets");
@@ -35,152 +47,124 @@ public class Driver extends User {
             System.out.println("4. View ticket payments that have not passed due");
             System.out.println("5. Check for warrant issued for your arrest");
             System.out.println("6. Exit");
-            
-            // Read user input
+
             int choice = scanner.nextInt();
-            scanner.nextLine();  // Clear the buffer
-            
+            scanner.nextLine(); // Clear the buffer
+
             switch (choice) {
-                case 1:
-                    // Handle option 1: Check all past tickets
-                    System.out.println("\nYou selected: Check all past tickets");
-                    // Call the method to display all past tickets
-                    displayPastTickets();
-
-                    break;
-
-                case 2:
-                    // Handle option 2: Make online payment for tickets
-                    System.out.println("\nYou selected: Make online payment for tickets");
-                    // Call the method to process online payment
-                    makePayment();
-
-                    break;
-
-                case 3:
-                    // Handle option 3: Check past-due tickets
-                    System.out.println("\nYou selected: Check past-due tickets");
-                    // Call the method to check past due tickets
-                    checkPastDueTickets();
-
-                    break;
-
-                case 4:
-                    // Handle option 4: View ticket payments that have not passed due
-                    System.out.println("\nYou selected: View ticket payments that have not passed due");
-                    // Call the method to display unpaid tickets
-                    viewUnpaidTickets();
-
-                    break;
-
-                case 5:
-                    // Handle option 5: Check for warrant issued for your arrest
-                    System.out.println("\nYou selected: Check for warrant issued for your arrest");
-                    // Call the method to check if a warrant is issued
-                    checkForWarrants();
-
-                    break;
-
-                case 6:
-                    // Handle option 6: Exit the program
-                    System.out.println("\nExiting the driver menu.");
-                    exit = true;  // Set the flag to exit the loop
-
-                    break;
-
-                default:
-                    // Handle invalid input
-                    System.out.println("\nInvalid choice. Please select a number between 1 and 6.");
-            }
-        }
-
-        scanner.close();  // Close the scanner after use
-    }
-
- private static void displayPastTickets() {
-        System.out.println("Displaying all past tickets ");
-        if (ticket != null) {
-            // Display ticket information
-            System.out.println("Ticket found for TRN: " + trn);
-            System.out.println("Fine Amount: $" + ticket.getFineAmount());
-            System.out.println("Paid: " + (ticket.isPaid() ? "Yes" : "No"));
-            
-            // Offer to pay fine if it's not already paid
-            if (!ticket.isPaid()) {
-                System.out.println("Would you like to pay this fine? (Yes/No)");
-                String paymentChoice = scanner.nextLine());
-
-                if (paymentChoice.equals("yes")) {
-             	private void makePayment(Scanner scanner) {
-    		System.out.println("Enter ticket number to pay:");
-    		String ticketNumber = scanner.nextLine();
-
-    		for (Ticket ticket : outstandingTickets) {
-        	if (ticket.getTicketNumber().equals(ticketNumber)) {
-           	 ticket.payTicket();
-            	outstandingTickets.remove(ticket);
-        
-                System.out.println("Payment successful! Fine has been paid.");
-		break;
-                } else {
-                    System.out.println("You chose not to pay the fine at this time.");
+                case 1 -> displayPastTickets(trn);
+                case 2 -> makePayment(scanner);
+                case 3 -> checkPastDueTickets();
+                case 4 -> viewUnpaidTickets();
+                case 5 -> checkForWarrants();
+                case 6 -> {
+                    System.out.println("Exiting the driver menu.");
+                    exit = true;
                 }
-            } else {
-                System.out.println("This fine has already been paid.");
+                default -> System.out.println("Invalid choice. Please select a number between 1 and 6.");
             }
-	else {
-            // If no ticket is found for the provided TRN
-            System.out.println("No tickets found for the provided TRN.");
-        }
-}
-
-// Method to check for past-due tickets
-public void checkPastDueTickets() 
-{
-	System.out.println("Checking for past-due tickets...");
-
-    for (Ticket ticket : outstandingTickets)  // Iterate through each ticket in the outstandingTickets collection
-{
-        // Check if the ticket is not null and if the ticket is overdue
-        if (ticket != null && ticket.isOverdue())
-{
-            ticket.displayTicketDetails(); // If the ticket is overdue, display its details by calling this function from ticket class
         }
     }
-}
 
-// Method to view unpaid tickets
-public void viewUnpaidTickets() 
-{
-    System.out.println("Viewing unpaid tickets...");
-    for (Ticket ticket : outstandingTickets) // Iterate through each ticket in the outstandingTickets collection
-{
-        
-        // Check if the ticket is not null and if the ticket's status is "Unpaid"
-        if (ticket != null && ticket.getStatus().equals("Unpaid")) {
-            
-            // If the ticket is unpaid, display its details by calling this function from ticket class
-            ticket.displayTicketDetails();
+    private void displayPastTickets(String trn) {
+        System.out.println("Displaying all past tickets...");
+        boolean ticketFound = false;
+
+        for (Ticket ticket : currentTickets) {
+            if (ticket != null && ticket.getDriver().getTrn().equals(trn)) {
+                ticketFound = true;
+                ticket.displayTicketDetails();
+            }
+        }
+
+        if (!ticketFound) {
+            System.out.println("No tickets found for TRN: " + trn);
         }
     }
-}
 
+    private void makePayment(Scanner scanner) {
+        System.out.println("Enter ticket number to pay:");
+        String ticketNumber = scanner.nextLine();
+        boolean paymentMade = false;
 
-// Method to check for warrants
-public void checkForWarrants() 
-{
-    if (Warrants) // If the Warrants boolean is true, it means there is a warrant
-	{
-        System.out.println("A warrant has been issued for your arrest."); 
-	} else {
-        System.out.println("No warrants have been issued for your arrest."); // If the Warrants boolean is false, there is no warrant
+        for (int i = 0; i < currentTickets.length; i++) {
+            Ticket ticket = currentTickets[i];
+            if (ticket != null && ticket.getTicketNumber().equals(ticketNumber) && ticket.unpaid()) {
+                ticket.payTicket();
+                currentTickets[i] = null; // Mark the ticket as paid by removing it
+                paymentMade = true;
+                System.out.println("Payment successful! Fine has been paid.");
+                break;
+            }
+        }
+
+        if (!paymentMade) {
+            System.out.println("Ticket not found or already paid.");
+        }
     }
-}
 
+    private void checkPastDueTickets() {
+        System.out.println("Checking for past-due tickets...");
+        boolean overdueFound = false;
 
-	// toString() method to print the Driver's details
-    @Override 
-    public String toString () {
-        return "The outstanding Tickets are: " + outstandingTickets + "Warrants? " + Warrants + "\n"; 
-    } 
+        for (Ticket ticket : currentTickets) {
+            if (ticket != null && ticket.unpaid()) {
+                overdueFound = true;
+                ticket.displayTicketDetails();
+            }
+        }
+
+        if (!overdueFound) {
+            System.out.println("No past-due tickets found.");
+        }
+    }
+
+    private void viewUnpaidTickets() {
+        System.out.println("Viewing unpaid tickets...");
+        boolean unpaidFound = false;
+
+        for (Ticket ticket : currentTickets) {
+            if (ticket != null && ticket.unpaid()) {
+                unpaidFound = true;
+                ticket.displayTicketDetails();
+            }
+        }
+
+        if (!unpaidFound) {
+            System.out.println("No unpaid tickets found.");
+        }
+    }
+
+    private void checkForWarrants() {
+        if (warrants) {
+            System.out.println("A warrant has been issued for your arrest.");
+        } else {
+            System.out.println("No warrants have been issued for your arrest.");
+        }
+    }
+
+    public String promptForVehiclePlateNumber() {
+    	Scanner scanner = new Scanner(System.in);
+        System.out.print("Please enter the vehicle plate number: ");
+        String inputPlateNumber = scanner.nextLine();
+
+        // Validate the input
+        if (inputPlateNumber == null || inputPlateNumber.trim().isEmpty()) {
+            System.out.println("Invalid input. Vehicle plate number cannot be empty.");
+        } else {
+            this.vehiclePlateNumber = inputPlateNumber.trim();
+            System.out.println("Vehicle plate number updated successfully: " + this.vehiclePlateNumber);
+        }
+        return inputPlateNumber;
+    }
+
+    // toString() method to print Driver's details
+    @Override
+    public String toString() {
+        return "Driver{" +
+                "currentTickets=" + java.util.Arrays.toString(currentTickets) +
+                ", warrants=" + warrants +
+                ", vehiclePlateNumber='" + vehiclePlateNumber + '\'' +
+                '}';
+    }
 }
