@@ -13,20 +13,20 @@ import java.util.Calendar;
 public class JCF_Officer extends User {
     private String badgeNumber;
     private String policeStation;
-    private Ticket[] currentTickets;  // Array to store current tickets
-    private Driver[] drivers;         // Array to store drivers
+    private static Ticket[] currentTickets;  // Array to store current tickets
+    private static Driver[] drivers;         // Array to store drivers
     private int ticketCount = 0;      // Tracks number of tickets in the array
     private int driverCount = 0;      // Tracks number of drivers in the array
     private int maxTickets = 50;      // Maximum tickets the officer can manage
     private JCF_Officer officer = null;
 
     // Constructor
-    public JCF_Officer() {
-    	super(getName(), trn, dob, parish, contact_number);
+    public JCF_Officer(String name, String trn, String dob, String parish, String contactNumber) {
+        super(name, trn, dob, parish, contactNumber); // Directly pass arguments to the parent constructor
         this.badgeNumber = "";
         this.policeStation = "";
-        this.currentTickets = new Ticket[maxTickets];  // Default size for currentTickets
-        this.drivers = new Driver[10]; // Default size for drivers
+        JCF_Officer.currentTickets = new Ticket[100];  // Default size for currentTickets
+        JCF_Officer.drivers = new Driver[10]; // Default size for drivers
     }
 
     // Method to prompt for user information
@@ -54,7 +54,7 @@ public class JCF_Officer extends User {
     }
 
     // Prompt for parish with validation (example: list of Jamaica's parishes)
-    private String promptForParish() {
+    private static String promptForParish() {
         String[] validParishes = {
             "1. Kingston", "2. St. Andrew", "3. St. Thomas", "4. Portland", "5. St. Mary", 
             "6. St. Ann", "7. Trelawny", "8. St. James", "9. Hanover", "10. Westmoreland", 
@@ -84,8 +84,8 @@ public class JCF_Officer extends User {
         return parish;
     }
 
- // Method to view all outstanding tickets sorted by parish
-    public void viewAllOutstandingTicketsSortedByParish() {
+    // Method to view all outstanding tickets sorted by parish
+    public static void viewAllOutstandingTicketsSortedByParish() {
         // Get the parish from the user
         String selectedParish = promptForParish();
 
@@ -132,9 +132,15 @@ public class JCF_Officer extends User {
         }
     }
 
-    // Prompt user and add a new ticket
-    public void promptAndAddNewTicket() {
-        Scanner scanner = new Scanner(System.in);
+ // Prompt user and add a new ticket
+ // Prompt user and add a new ticket
+    public static void promptAndAddNewTicket(JCF_Officer officer, int ticketCount) {
+       
+        if (currentTickets == null) {
+            System.out.println("Error: Ticket array is not initialized.");
+            return;  // Or initialize it here
+        }
+    	Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter Ticket Number:");
         String ticketNumber = scanner.nextLine();
@@ -143,7 +149,7 @@ public class JCF_Officer extends User {
         String offenceCode = scanner.nextLine();
 
         // Create a Fine object to handle fine calculation
-        Fine fine = calculateFine(offenceCode);
+        Fine fine = calculateFine(offenceCode);  // Pass offenceCode as a parameter
         System.out.println("Fine Amount: " + fine.getFineAmount());
 
         System.out.println("Enter Offence Description:");
@@ -152,17 +158,20 @@ public class JCF_Officer extends User {
         System.out.println("Enter Vehicle Plate Number:");
         String vehiclePlateNumber = scanner.nextLine();
 
-        Driver driver = findDriverByPlate(vehiclePlateNumber); // Call the newly defined method
-        if (driver == null) {
-            System.out.println("Driver not found for the given vehicle plate number.");
-            return;
-        }
+        // Prompt for driver details
+        System.out.println("Enter Driver's Name:");
+        String driverName = scanner.nextLine();
+
+        System.out.println("Enter Driver's License Number:");
+        String licenseNumber = scanner.nextLine();
+
+        Driver driver = new Driver(driverName, licenseNumber, vehiclePlateNumber, licenseNumber, licenseNumber, currentTickets, false); // Create a new driver instance
 
         // Ensure array has capacity
-        if (ticketCount >= currentTickets.length) {
+        /*if (ticketCount >= currentTickets.length) {
             System.out.println("Ticket array is full. Cannot add more tickets.");
             return;
-        }
+        }*/
 
         // Use calculateDueDate method to determine the due date
         Date issueDate = new Date();
@@ -182,12 +191,13 @@ public class JCF_Officer extends User {
             System.out.println("Ticket Added Successfully!");
         } else {
             System.out.println("Ticket entry was cancelled. Please re-enter the details.");
-            promptAndAddNewTicket(); // Ask for details again if not confirmed
+            promptAndAddNewTicket(officer, ticketCount); // Ask for details again if not confirmed
         }
     }
 
- // Method to check unpaid tickets past 21 days
-    public void checkUnpaidTickets() {
+
+    // Method to check unpaid tickets past 21 days
+    public static void checkUnpaidTickets() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the Driver's TRN to check unpaid tickets:");
         String trn = scanner.nextLine();
@@ -222,113 +232,8 @@ public class JCF_Officer extends User {
             System.out.println("No unpaid tickets past the 21-day stipulation.");
         }
     }
-    
- // Method to view outstanding tickets in a specific parish
-    public void viewOutstandingTicketsInParish() {
-        Scanner scanner = new Scanner(System.in);
-
-        // Prompt user for the parish
-        System.out.println("Enter the parish to view outstanding tickets:");
-        String parish = scanner.nextLine();
-
-        System.out.println("\n--- Outstanding Tickets in " + parish + " ---");
-
-        // Initialize variables for tracking top offender
-        Driver topOffender = null;
-        int maxTickets = 0;
-
-        // Count outstanding tickets per driver
-        for (Driver driver : drivers) {
-            if (driver != null && driver.getParish().equalsIgnoreCase(parish)) {
-                int driverTicketCount = 0;
-
-                for (Ticket ticket : currentTickets) {
-                    if (ticket != null && ticket.getDriver().equals(driver) && ticket.getStatus().equalsIgnoreCase("Unpaid")) {
-                        System.out.println(ticket); // Print ticket information
-                        driverTicketCount++;
-                    }
-                }
-
-                // Update the top offender if this driver has more tickets
-                if (driverTicketCount > maxTickets) {
-                    maxTickets = driverTicketCount;
-                    topOffender = driver;
-                }
-            }
-        }
-
-        // Display results
-        if (topOffender != null) {
-            System.out.println("\n--- Top Offender in " + parish + " ---");
-            System.out.println("Name: " + topOffender.getName());
-            System.out.println("TRN: " + topOffender.getTrn());
-            System.out.println("Address: " + topOffender.getParish());
-            System.out.println("Contact: " + topOffender.getContact_number());
-            // Gender was not added //System.out.println("Gender: " + topOffender.gender());
-            System.out.println("Number of Outstanding Tickets: " + maxTickets);
-        } else {
-            System.out.println("No outstanding tickets found in " + parish + ".");
-        }
-    }
-
-
- // Method to view all offenders with outstanding tickets
-    public void viewOffendersWithOutstandingTickets() {
-        System.out.println("\n--- Offenders with Outstanding Tickets ---");
-        
-        boolean found = false;
-        for (Ticket ticket : currentTickets) {
-            if (ticket != null && ticket.getStatus().equals("Unpaid")) {
-                Driver driver = ticket.getDriver();
-                System.out.println("Driver TRN: " + driver.getTrn());
-                System.out.println("Driver Name: " + driver.getName());
-                System.out.println("Driver Address: " + driver.getParish());
-                System.out.println("Ticket Number: " + ticket.getTicketNumber());
-                System.out.println("Ticket Issue Date: " + ticket.getIssueDate());
-                System.out.println("Ticket Due Date: " + ticket.getDueDate());
-                System.out.println("Ticket Status: " + ticket.getStatus());
-                System.out.println("------------------------------");
-                found = true;
-            }
-        }
-        
-        if (!found) {
-            System.out.println("No outstanding tickets found.");
-        }
-    }
-    
- // Method to view all outstanding tickets in a specific parish
-    public void viewOutstandingTicketsByParish() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the Parish to view outstanding tickets:");
-        String parish = scanner.nextLine();
-
-        System.out.println("\n--- Outstanding Tickets in " + parish + " ---");
-
-        boolean found = false;
-        for (Ticket ticket : currentTickets) {
-            if (ticket != null && ticket.getStatus().equals("Unpaid") && ticket.getDriver().getParish().equalsIgnoreCase(parish)) {
-                Driver driver = ticket.getDriver();
-                System.out.println("Ticket Number: " + ticket.getTicketNumber());
-                System.out.println("Offence Code: " + ticket.getOffenceCode());
-                System.out.println("Ticket Issue Date: " + ticket.getIssueDate());
-                System.out.println("Ticket Due Date: " + ticket.getDueDate());
-                System.out.println("Driver TRN: " + driver.getTrn());
-                System.out.println("Driver Name: " + driver.getName());
-                System.out.println("Driver Address: " + driver.getParish());
-                System.out.println("------------------------------");
-                found = true;
-            }
-        }
-
-        if (!found) {
-            System.out.println("No outstanding tickets found in the specified parish.");
-        }
-    }
-
-
-    // Find driver by TRN
-    private Driver findDriverByTrn(String trn) {
+    // Method to find driver by TRN
+    private static Driver findDriverByTrn(String trn) {
         for (Driver driver : drivers) {
             if (driver != null && driver.getTrn().equals(trn)) {
                 return driver;
@@ -337,19 +242,17 @@ public class JCF_Officer extends User {
         return null;
     }
 
-    
-    // Find driver by vehicle plate
-    private Driver findDriverByPlate(String plateNumber) {
-        for (int i = 0; i < driverCount; i++) {
-            if (drivers[i] != null && drivers[i].promptForVehiclePlateNumber().equalsIgnoreCase(plateNumber)) {
-                return drivers[i];
+    // Method to find driver by vehicle plate number
+    private static Driver findDriverByPlate(String plateNumber) {
+        for (Driver driver : drivers) {
+            if (driver != null && driver.promptForVehiclePlateNumber().equals(plateNumber)) {
+                return driver;
             }
         }
         return null;
     }
 
-    // Calculate fine based on offence code and return a Fine object
-    private Fine calculateFine(String offenceCode) {
+    private static Fine calculateFine(String offenceCode) {
         float fineAmount;
         String fineType = "";
         String fineDescription = "";
@@ -375,102 +278,141 @@ public class JCF_Officer extends User {
         return new Fine(fineAmount, fineType, fineDescription);
     }
 
-    // Calculate due date, adding 30 days to the current date
-    private Date calculateDueDate() {
+    // Method to calculate due date (21 days from issue date)
+    private static Date calculateDueDate() {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, 30);
+        calendar.setTime(new Date()); // Set current date
+        calendar.add(Calendar.DAY_OF_YEAR, 21); // Add 21 days
         return calendar.getTime();
     }
 
-    // Write tickets to file
-    private void writeTicketsToFile() {
+    // Method to display ticket and prompt user to confirm
+    private static boolean viewAndConfirmTicket(Ticket ticket) {
+        System.out.println("Ticket Details:");
+        System.out.println("Ticket Number: " + ticket.getTicketNumber());
+        System.out.println("Offence: " + ticket.getOffenceDescription());
+        System.out.println("Fine: " + ticket.getFineAmount());
+        System.out.println("Vehicle Plate: " + ticket.getVehiclePlateNumber());
+        System.out.println("Due Date: " + ticket.getDueDate());
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Do you want to confirm this ticket? (yes/no)");
+        String confirmation = scanner.nextLine();
+
+        return confirmation.equalsIgnoreCase("yes");
+    }
+
+    // Method to write tickets to file
+    private static void writeTicketsToFile() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("tickets.dat"))) {
-            out.writeObject(currentTickets);
+            for (Ticket ticket : currentTickets) {
+                if (ticket != null) {
+                    out.writeObject(ticket);
+                }
+            }
         } catch (IOException e) {
-            System.out.println("Error writing to file: " + e.getMessage());
+            System.out.println("Error writing tickets to file: " + e.getMessage());
         }
     }
 
-    // Display ticket details and prompt for confirmation
-    private boolean viewAndConfirmTicket(Ticket ticket) {
-        Scanner scanner = new Scanner(System.in);
-
-        // Display the ticket details
-        System.out.println("\n--- Ticket Information ---");
-        System.out.println("Full Name: " + this.name);
-        System.out.println("TRN: " + this.trn);
-        System.out.println("Date of Birth: " + this.dob);
-        System.out.println("Parish: " + this.parish);
-        System.out.println("Contact Number: " + this.contact_number);
-        System.out.println("Ticket Number: " + ticket.getTicketNumber());
-        System.out.println("Offence Code: " + ticket.getOffenceCode());
-        System.out.println("Fine Amount: " + ticket.getFineAmount());
-        System.out.println("Offence Description: " + ticket.getOffenceDescription());
-        System.out.println("Vehicle Plate Number: " + ticket.getVehiclePlateNumber());
-        System.out.println("Driver: " + ticket.getDriver().getName());
-        System.out.println("Issue Date: " + ticket.getIssueDate());
-        System.out.println("Due Date: " + ticket.getDueDate());
-
-        // Ask if the ticket should be stored
-        System.out.println("Do you want to store this ticket? (yes/no):");
-        String confirmation = scanner.nextLine().toLowerCase();
-
-        return confirmation.equals("yes");
+    // Method to load tickets from file
+    private void loadTicketsFromFile() {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("tickets.dat"))) {
+            while (true) {
+                Ticket ticket = (Ticket) in.readObject();
+                if (ticket != null) {
+                    currentTickets[ticketCount++] = ticket;
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error loading tickets from file: " + e.getMessage());
+        }
     }
 
-    // Main Menu to interact with the officer
-    public void officerMenu() {
-        Scanner scanner = new Scanner(System.in);
-
-        // Create a JCF_Officer instance
-        JCF_Officer officer = new JCF_Officer();
-        
-        // Prompt for user details (name, TRN, DOB, etc.)
-        officer.promptForUserInfo(); 
-
-        // Display collected user information
-        System.out.println("Officer Information:");
-        System.out.println("Name: " + officer.getName());
-        System.out.println("TRN: " + officer.getTrn());
-        System.out.println("Date of Birth: " + officer.getDob());
-        System.out.println("Parish: " + officer.getParish());
-        System.out.println("Contact Number: " + officer.getContact_number());
-
-        // Simple menu for interacting with the officer
-        while (true) {
-            System.out.println("\n--- Menu ---");
-            System.out.println("1. Add New Ticket");
-            System.out.println("2. Retrieve Ticket");
-            System.out.println("3. Delete Ticket");
-            System.out.println("4. Exit");
-            System.out.print("Enter your choice: ");
-
-            try {
-                int choice = scanner.nextInt();
-                scanner.nextLine(); // Consume newline
-
-                switch (choice) {
-                    case 1:
-                        officer.promptAndAddNewTicket();
-                        break;
-                    case 2:
-                        System.out.println("Retrieve Ticket feature is not implemented yet.");
-                        break;
-                    case 3:
-                        System.out.println("Delete Ticket feature is not implemented yet.");
-                        break;
-                    case 4:
-                        System.out.println("Exiting...");
-                        scanner.close(); // Close scanner
-                        return; // Exit the method
-                    default:
-                        System.out.println("Invalid choice. Please try again.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a number between 1 and 4.");
-                scanner.nextLine(); // Clear invalid input
+    // Method to display all tickets
+    public static void displayAllTickets() {
+        System.out.println("--- All Tickets ---");
+        for (Ticket ticket : currentTickets) {
+            if (ticket != null) {
+                System.out.println(ticket);
             }
         }
     }
 
-}
+    // Method to add a driver to the driver list
+    public void addDriver(Driver driver) {
+        if (driverCount < drivers.length) {
+            drivers[driverCount++] = driver;
+        } else {
+            System.out.println("Driver list is full.");
+        }
+    }
+
+    // Method to display all drivers
+    public void displayAllDrivers() {
+        System.out.println("--- All Drivers ---");
+        for (Driver driver : drivers) {
+            if (driver != null) {
+                System.out.println(driver);
+            }
+        }
+    }
+    
+    public static void jcfOfficerMenu(Scanner scanner, JCF_Officer officer, int ticketCount, Ticket[] currentTickets) {
+        boolean exitOfficerMenu = false;
+
+        while (!exitOfficerMenu) {
+            // Display Officer Menu
+            System.out.println("\n--- JCF Officer Menu ---");
+            System.out.println("1. Add Ticket");
+            System.out.println("2. Check Driver Status");
+            System.out.println("3. View All Tickets");
+            System.out.println("4. Exit Officer Menu");
+
+            System.out.print("Enter your choice: ");
+            int officerChoice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (officerChoice) {
+                case 1: // Add Ticket
+                    // Call the method promptAndAddNewTicket
+                    promptAndAddNewTicket(officer, ticketCount);
+                    break;
+
+                case 2: // Check Driver Status
+                    System.out.println("Select What you would like to do:");
+                    System.out.println("1. Check Unpaid Tickets Past 21 Days");
+                    System.out.println("2. View All Outstanding Tickets by Parish");
+                    int driverChoice = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+                    
+                    switch (driverChoice) {
+                        case 1: // Check unpaid tickets past 21 days
+                            checkUnpaidTickets();
+                            break;
+                        case 2: // View outstanding tickets by parish
+                            viewAllOutstandingTicketsSortedByParish();
+                            break;
+                        default:
+                            System.out.println("Invalid choice. Returning to menu.");
+                    }
+                    break;
+
+                case 3: // View All Tickets
+                    displayAllTickets();
+                    break;
+
+                case 4: // Exit Officer Menu
+                    exitOfficerMenu = true;
+                    System.out.println("Exiting Officer Menu...");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    
+    }
+
