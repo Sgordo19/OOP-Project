@@ -1,73 +1,90 @@
 package Final_Project;
 
-public class Applicant extends User{
-	private String email;
-	private Ticket ticket;
-	private Boolean accidents;
-	private Boolean negativePoliceRecords;
-	
-	// Primary Constructor
-public Applicant(String name, String trn, String dob, String address, String contact_number, String email, Ticket ticket, Boolean accidents, Boolean negativePoliceRecords)
-{
-	super(name,trn,dob,address,contact_number);
-	this.email = email;
-	this.ticket = ticket;
-	this.accidents = accidents;
-	this.negativePoliceRecords = negativePoliceRecords; 
-}
+import java.util.Scanner;
 
-public Applicant( Applicant app)
-{
-	super(app);
-	email = app.email;
-	ticket = app.ticket;
-	accidents = app.accidents;
-	negativePoliceRecords = app.negativePoliceRecords;
-}
+public class Applicant extends User {
+    private String email;
+    private static Ticket ticket;
+    private Boolean accidents;
+    private Boolean negativePoliceRecords;
+    private String status;  // Add status field
 
-public String getEmail() {
-	return email;
-}
+    // Static array to hold all applicants (fixed size array)
+    private static Applicant[] applicants = new Applicant[100];  // Set a max size of 100 applicants
+    private static int applicantCount = 0;  // Keep track of the number of applicants in the array
 
-public void setEmail(String email) {
-	this.email = email;
-}
+    // Primary Constructor
+    public Applicant(String name, String trn, String dob, String parish, String contact_number, String email, Boolean accidents, Boolean negativePoliceRecords, Ticket ticket) {
+        super(name, trn, dob, parish, contact_number);  // Call the parent constructor to initialize inherited fields
+        this.email = email;
+        this.ticket = ticket;
+        this.accidents = accidents;
+        this.negativePoliceRecords = negativePoliceRecords;
+        this.status = "Pending";  // Default status
+    }
 
-public Ticket getTicket() {
-	return ticket;
-}
+    // Getter and Setter Methods
+    public String getEmail() {
+        return email;
+    }
 
-public void setTicket(Ticket ticket) {
-	this.ticket = ticket;
-}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-public Boolean getAccidents() {
-	return accidents;
-}
+    public Ticket getTicket() {
+        return ticket;
+    }
 
-public void setAccidents(Boolean accidents) {
-	this.accidents = accidents;
-}
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
+    }
 
-public Boolean getNegativePoliceRecords() {
-	return negativePoliceRecords;
-}
+    public Boolean getAccidents() {
+        return accidents;
+    }
 
-public void setNegativePoliceRecords(Boolean negativePoliceRecords) {
-	this.negativePoliceRecords = negativePoliceRecords;
-}
- // Method to search for an applicant by TRN and display their information
-    public static void searchApplicant(String trn, Applicant[] applicants) {
+    public void setAccidents(Boolean accidents) {
+        this.accidents = accidents;
+    }
+
+    public Boolean getNegativePoliceRecords() {
+        return negativePoliceRecords;
+    }
+
+    public void setNegativePoliceRecords(Boolean negativePoliceRecords) {
+        this.negativePoliceRecords = negativePoliceRecords;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    // Method to add applicant to the array
+    public static void addApplicant(Applicant applicant) {
+        if (applicantCount < applicants.length) {
+            applicants[applicantCount] = applicant;
+            applicantCount++;
+        } else {
+            System.out.println("Applicant list is full.");
+        }
+    }
+
+    // Search for an applicant by TRN and display their information
+    public static void searchApplicant(String trn) {
         boolean applicantFound = false;
 
-        // Search through the applicants array to find a match for the given TRN
-        for (Applicant applicant : applicants) {
-            if (applicant.getTrn().equals(trn)) {
+        for (int i = 0; i < applicantCount; i++) {
+            if (applicants[i].getTrn().equals(trn)) {
                 applicantFound = true;
-                displayApplicantInfo(applicant);
-                displayTicketInfo(applicant);
-                displayPoliceRecordCheck(applicant);
-                displayApplicationStatus(applicant);
+                displayApplicantInfo(applicants[i]);
+                displayTicketInfo(applicants[i]);
+                displayPoliceRecordCheck(applicants[i]);
+                displayApplicationStatus(applicants[i]);
                 break;
             }
         }
@@ -77,53 +94,170 @@ public void setNegativePoliceRecords(Boolean negativePoliceRecords) {
         }
     }
 
-    // Method to display the full applicant information
+    // Display applicant information
     public static void displayApplicantInfo(Applicant applicant) {
         System.out.println("Full Name: " + applicant.getName());
         System.out.println("Date of Birth: " + applicant.getDob());
         System.out.println("TRN: " + applicant.getTrn());
-        System.out.println("Address: " + applicant.getAddress());
+        System.out.println("Address: " + applicant.getParish());
         System.out.println("Email: " + applicant.getEmail());
         System.out.println("Contact Number: " + applicant.getContact_number());
     }
 
-    // Method to display the ticket details of an applicant
+    // Display ticket details of an applicant
     public static void displayTicketInfo(Applicant applicant) {
-        int numberOfTickets = 0;
-        double totalAmountOwing = 0;
-
-        if (applicant.getTicket() != null) 
-	{
-            numberOfTickets++;
-            totalAmountOwing += applicant.getTicket().getAmount();
-            System.out.println("Number of Tickets: " + numberOfTickets);
-            System.out.println("Ticket Description: " + applicant.getTicket().getDescription());
-            System.out.println("Ticket Amount: $" + applicant.getTicket().getAmount());
+        if (applicant.getTicket() != null) {
+            System.out.println("Ticket Description: " + applicant.getTicket().getOffenceDescription());
+            System.out.println("Ticket Amount: $" + applicant.getTicket().getFineAmount());
+        } else {
+            System.out.println("No tickets found for this applicant.");
         }
-
-        System.out.println("Total Amount Owing: $" + totalAmountOwing);
     }
 
-    // Method to display the police record check result
-    public static void displayPoliceRecordCheck(Applicant applicant)
-	{
-        if (applicant.getNegativePoliceRecords()) 
-	{
+    // Display police record check result
+    public static void displayPoliceRecordCheck(Applicant applicant) {
+        if (applicant.getNegativePoliceRecords()) {
             System.out.println("Police Record Check: Denied");
-        } else 
-	{
+        } else {
             System.out.println("Police Record Check: Approved");
-        } 
-	}
+        }
+    }
 
-    // Method to check and display the application status (approved or denied)
+    // Display application status (approved or denied)
     public static void displayApplicationStatus(Applicant applicant) {
         if (applicant.getAccidents() || applicant.getNegativePoliceRecords()) {
-            System.out.println("Application Denied based on the disqualification of the proposed driver.");
-            System.out.println("You have 5 to 10 business days to provide another driver.");
-            System.out.println("The application is therefore denied pending the change of driver and/or the full payment of the outstanding fees.");
+            System.out.println("Application Denied.");
         } else {
             System.out.println("Application Approved!");
         }
     }
+
+    // Create a new applicant from user input
+    public static void createApplicant(Scanner scanner) {
+        System.out.println("Enter Applicant TRN:");
+        String trn = scanner.nextLine();
+        System.out.println("Enter Applicant Name:");
+        String name = scanner.nextLine();
+        System.out.println("Enter Applicant Date of Birth:");
+        String dob = scanner.nextLine();
+        System.out.println("Enter Applicant Address:");
+        String address = scanner.nextLine();
+        System.out.println("Enter Applicant Email:");
+        String email = scanner.nextLine();
+        System.out.println("Enter Applicant Contact Number:");
+        String contactNumber = scanner.nextLine();
+        System.out.println("Has the applicant had any accidents in the past 2 years? (true/false):");
+        boolean accidents = Boolean.parseBoolean(scanner.nextLine());
+        System.out.println("Does the applicant have a negative police record? (true/false):");
+        boolean negativePoliceRecords = Boolean.parseBoolean(scanner.nextLine());
+
+        // You must pass 'ticket' here, but it looks like 'ticket' needs to be created first
+        // Create a ticket first or pass it as a parameter
+           Applicant applicant = new Applicant(name, trn, dob, address, contactNumber, email, accidents, negativePoliceRecords, ticket);
+        addApplicant(applicant);
+
+        System.out.println("Applicant created successfully!");
+        displayApplicantInfo(applicant);
+    }
+
+    // Approve an applicant
+    public static void approveApplicant(String trn) {
+        for (int i = 0; i < applicantCount; i++) {
+            if (applicants[i].getTrn().equals(trn)) {
+                applicants[i].setStatus("Approved");
+                System.out.println("Applicant approved successfully!");
+                return;
+            }
+        }
+        System.out.println("Applicant with TRN " + trn + " not found.");
+    }
+
+    // Reject an applicant
+    public static void rejectApplicant(String trn) {
+        for (int i = 0; i < applicantCount; i++) {
+            if (applicants[i].getTrn().equals(trn)) {
+                applicants[i].setStatus("Rejected");
+                System.out.println("Applicant rejected successfully!");
+                return;
+            }
+        }
+        System.out.println("Applicant with TRN " + trn + " not found.");
+    }
+
+    public static void deleteApplicant(String trn) {
+        for (int i = 0; i < applicantCount; i++) {
+            if (applicants[i].getTrn().equals(trn)) {
+                // Shift all subsequent applicants down one position
+                for (int j = i; j < applicantCount - 1; j++) {
+                    applicants[j] = applicants[j + 1];
+                }
+                applicants[applicantCount - 1] = null;  // Set last element to null
+                applicantCount--;
+                System.out.println("Applicant with TRN " + trn + " has been deleted.");
+                return;
+            }
+        }
+        System.out.println("Applicant with TRN " + trn + " not found.");
+    }
+
+    // Display Applicant Information Method
+    public static void displayInfo(Applicant applicant) {
+        System.out.println("Full Name: " + applicant.getName());
+        System.out.println("Date of Birth: " + applicant.getDob());
+        System.out.println("TRN: " + applicant.getTrn());
+        System.out.println("Address: " + applicant.getParish());
+        System.out.println("Email: " + applicant.getEmail());
+        System.out.println("Contact Number: " + applicant.getContact_number());
+
+        if (applicant.getTicket() != null) {
+            System.out.println("Ticket Info: " + applicant.getTicket().getOffenceDescription() + " - $" + applicant.getTicket().getFineAmount());
+        }
+
+        System.out.println("Accidents: " + applicant.getAccidents());
+        System.out.println("Negative Police Record: " + applicant.getNegativePoliceRecords());
+    }
+
+    // Helper method to display all applicants
+    public static void displayAllApplicants() {
+        if (applicantCount == 0) {
+            System.out.println("No applicants found.");
+        } else {
+            for (int i = 0; i < applicantCount; i++) {
+                displayInfo(applicants[i]);
+            }
+        }
+    }
+
+    // Update Applicant Method
+    public static void updateApplicant(String trn, Scanner scanner) {
+        for (int i = 0; i < applicantCount; i++) {
+            if (applicants[i].getTrn().equals(trn)) {
+                System.out.println("Updating applicant with TRN: " + trn);
+                System.out.print("Enter new address: ");
+                applicants[i].setParish(scanner.nextLine());
+                System.out.print("Enter new email: ");
+                applicants[i].setEmail(scanner.nextLine());
+                System.out.print("Does the applicant have any accidents in the past 2 years? (true/false): ");
+                applicants[i].setAccidents(Boolean.parseBoolean(scanner.nextLine()));
+                System.out.print("Does the applicant have a negative police record? (true/false): ");
+                applicants[i].setNegativePoliceRecords(Boolean.parseBoolean(scanner.nextLine()));
+                System.out.println("Applicant information updated successfully.");
+                return;
+            }
+        }
+        System.out.println("No applicant found with TRN " + trn);
+    }
+    
+    // Display All Applicants 
+    public static void displayAllApplicantsInfo() {
+        if (applicantCount == 0) {
+            System.out.println("No applicants available.");
+        } else {
+            for (int i = 0; i < applicantCount; i++) {
+                displayApplicantInfo(applicants[i]);  // Call displayApplicantInfo for each applicant
+                System.out.println("\n");
+            }
+        }
+    }
+
 }
