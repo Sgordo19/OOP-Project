@@ -10,6 +10,14 @@ public abstract class User {
     protected String parish;
     protected String contact_number;
 
+    
+    public User(String name, String trn, String dob, String parish, String contact_number) {
+        this.name = name;
+        this.trn = trn;
+        this.dob = dob;
+        this.parish = parish;
+        this.contact_number = contact_number;
+    }
     // List of valid parishes in Jamaica
     private static final String[] VALID_PARISHES = {
         "Kingston", "Saint Andrew", "Saint Thomas", "Portland", "Clarendon",
@@ -54,24 +62,50 @@ public abstract class User {
         return parishInput;
     }
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getTrn() {
+		return trn;
+	}
+
+	public void setTrn(String trn) {
+		this.trn = trn;
+	}
+
+	public String getDob() {
+		return dob;
+	}
+
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
+
+	public String getParish() {
+		return parish;
+	}
+
+	public void setParish(String parish) {
+		this.parish = parish;
+	}
+
+	public String getContact_number() {
+		return contact_number;
+	}
+
+	public void setContact_number(String contact_number) {
+		this.contact_number = contact_number;
+	}
+
+	public static String[] getValidParishes() {
+		return VALID_PARISHES;
+	}
+
     // Getter methods
-    public String getName() {
-        return name;
-    }
 
-    public String getTrn() {
-        return trn;
-    }
-
-    public String getDob() {
-        return dob;
-    }
-
-    public String getParish() {
-        return parish;
-    }
-
-    public String getContactNumber() {
-        return contact_number;
-    }
 }
