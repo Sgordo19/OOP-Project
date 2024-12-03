@@ -1,190 +1,136 @@
+package Final_Project;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-
-public class Main {
+public class main {
+    
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in); //Scanner object to read user input
-        boolean exitSystem = false; //Controls when the main loop ends
-        boolean inSystem;
+        Scanner scanner = new Scanner(System.in);
+        boolean exitSystem = false;
 
-        
-        while (!exitSystem) // Continues loop until exitSystem is set to true
-        {
-            //Display Menu
-            System.out.println("\n--- Ticketing Issuing and Offender Checking System (TIOCS) ---");
-            System.out.println("Welcome to the Ticketing Issuing and Offender Checking System (TIOCS)");
-            System.out.println("Please select an option:");
+        while (!exitSystem) {
+            // Display Main Menu
+            System.out.println("\n--- Ticket Issuing and Offender Checking System (TIOCS) ---");
             System.out.println("1. Officer Login");
             System.out.println("2. Driver Menu");
-            System.out.println("3. Exit");
+            System.out.println("2. JCF Officer Menu");
+            System.out.println("4. Exit");
 
-            int choice = scanner.nextInt(); //Read's the user's input
-            scanner.nextLine(); //Removes newline
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
 
-            //// Switch case to handle the user's menu choice
             switch (choice) {
                 case 1: // Officer Login
                     System.out.println("Enter Officer Username:");
                     String username = scanner.nextLine();
                     System.out.println("Enter Officer Password:");
                     String password = scanner.nextLine();
-                    // Check if the entered credentials are correct
-                    if (username.equals("admin") && password.equals("password123"))
-                    {
-                        //If credentials are correct, login is successful
+
+                    if (username.equals("admin") && password.equals("password123")) {
                         System.out.println("Login successful. Welcome, Processing Officer!");
-                        //// Call officer menu if login is successful
                         officerMenu(scanner);
-                        inSystem = true;
                     } else {
-                        // If credentials are incorrect, show an error message
                         System.out.println("Invalid username or password. Access denied.");
                     }
                     break;
-              case 2: // Driver Menu
-                    driverMenu(scanner); // If the user selects Driver Menu, call the driverMenu method 
-                    break;
 
-                case 3: // Exit System
-                    // If the user selects exit, exit the loop
+                case 2: // Driver Menu (Placeholder)
+                    System.out.println("Please enter your TRN number: ");
+                    String trn = scanner.nextLine();
+                    break;
+                    
+                case 3:
+                    System.out.println("Enter JCF Officer Username:");
+                    String username1 = scanner.nextLine();
+                    System.out.println("Enter Officer Password:");
+                    String password1 = scanner.nextLine();
+
+                    if (username1.equals("admin") && password1.equals("password123")) {
+                        System.out.println("Login successful. Welcome, JCF_Officer!");
+                        officerMenu(scanner);
+                    } else {
+                        System.out.println("Invalid username or password. Access denied.");
+                    }
+                    break;
+                	
+                case 4: // Exit
                     System.out.println("Thank you for using TIOCS. Goodbye!");
-                    exitSystem = true; // Set exitSystem to true to break the loop
+                    exitSystem = true;
                     break;
 
                 default:
-                    // If the user enters an invalid choice, ask them to try again
                     System.out.println("Invalid choice. Please try again.");
-                }
             }
-            scanner.close(); // Close the scanner
-            }
+        }
 
-     private static void officerMenu(Scanner scanner) // Method for the Officer menu 
-    {
+        scanner.close();
+    }
+
+    private static void officerMenu(Scanner scanner) {
         boolean exitOfficerMenu = false;
 
-        while (!exitOfficerMenu) // Loop for processing officer menu 
-        {
-            // Display options
-            System.out.println("\nProccesing Officer Menu: ");
-            System.out.println("1. Create Application");
-            System.out.println("2. Update Application");
-            System.out.println("3. Delete Application");
-            System.out.println("4. Exit Officer Menu");
+        while (!exitOfficerMenu) {
+            // Display Officer Menu
+            System.out.println("\n--- Officer Menu ---");
+            System.out.println("1. Create Applicant");
+            System.out.println("2. Update Applicant");
+            System.out.println("3. Delete Applicant");
+            System.out.println("4. Approve Applicant");
+            System.out.println("5. Reject Applicant");
+            System.out.println("6. View All Applicants");
+            System.out.println("7. Exit Officer Menu");
 
-            int officerChoice = scanner.nextInt(); // Get the officer's choice from the menu
-            scanner.nextLine(); // Removes newline
+            System.out.print("Enter your choice: ");
+            int officerChoice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
 
-            switch (officerChoice) // Switch case to handle the officer's selection
-            {
-                case 1: //Create Application
-                    System.out.println("Creating application...");
-                    System.out.println("Enter Applicant TRN:");
-                    String trn = scanner.nextLine();
-                    System.out.println("Enter Applicant Name:");
-                    String name = scanner.nextLine();
-                    System.out.println("Enter Applicant Date of Birth:");
-                    String dob = scanner.nextLine();
-                    System.out.println("Enter Applicant Address:");
-                    String address = scanner.nextLine();
-                    System.out.println("Enter Applicant Email:");
-                    String email = scanner.nextLine();
-                    System.out.println("Enter Applicant Contact Number:");
-                    String contact_number = scanner.nextLine();
-                    System.out.println("Has the applicant had any accidents in the past 2 years? (true/false):");
-                    boolean accidents = scanner.nextBoolean();
-                    System.out.println("Does the applicant have a negative police record? (true/false):");
-                    boolean negativePoliceRecords = scanner.nextBoolean();
-                    scanner.nextLine(); 
+            switch (officerChoice) {
+                case 1: // Create Applicant
+                    Applicant.createApplicant(scanner);
+                    break;
 
-                    // Create a new object with the user's input
-                    Applicant applicant1 = new Applicant(trn, name, dob, address, email, contact_number, accidents, negativePoliceRecords);
+                case 2: // Update Applicant
+                    System.out.print("Enter TRN of Applicant to update: ");
+                    String updateTRN = scanner.nextLine();
+                    Applicant.updateApplicant(updateTRN, scanner);
+                    break;
 
-                    System.out.println("Application created successfully.");
-                    applicant.displayDetails(); // Display applicant details
+                case 3: // Delete Applicant
+                    System.out.print("Enter TRN of Applicant to delete: ");
+                    String deleteTRN = scanner.nextLine();
+                    Applicant.deleteApplicant(deleteTRN);
+                    break;
 
-                break;
+                case 4: // Approve Applicant
+                    System.out.print("Enter TRN of Applicant to approve: ");
+                    String approveTRN = scanner.nextLine();
+                    Applicant.approveApplicant(approveTRN);
+                    break;
 
-                  case 2:
-                        // Update Applicant (needs adjustments)
-                    public void updateApplicant(String trn, Applicant updatedApplicant) {
-                    if (applicant.get(trn) == null) {
-                        System.out.println("Applicant with TRN " + trn + " does not exist.");
-                        } else 
-                        {
-                        applicant.put(trn, updatedApplicant);
-                        System.out.println("Applicant with TRN " + trn + " has been updated.");
-                        }
-                        }
-                break;
+                case 5: // Reject Applicant
+                    System.out.print("Enter TRN of Applicant to reject: ");
+                    String rejectTRN = scanner.nextLine();
+                    Applicant.rejectApplicant(rejectTRN);
+                    break;
 
-                   case 3: // Delete Applicant
-                    public void deleteApplicant(String trn) {
-                        if (applicants.remove(trn) != null) {
-                    System.out.println("Applicant with TRN " + trn + " has been deleted.");
-                        } else {
-                    System.out.println("Applicant with TRN " + trn + " not found.");
-                }
-                }
-                break;
+                case 6: // View All Applicants
+                    Applicant.displayAllApplicantsInfo();;
+                    break;
 
-                case 4:
-                // Reject Applicant
-                public boolean rejectApplicant(String trn) {
-                Applicant applicant = applicants.get(trn);
-                if (applicant != null) {
-                applicant.setStatus("Rejected");
-                System.out.println("Applicant with TRN " + trn + " has been rejected.");
-                return true;
-                } else {
-                System.out.println("Applicant with TRN " + trn + " not found.");
-                return false;
+                case 7: // Exit Officer Menu
+                    exitOfficerMenu = true;
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please try again.");
             }
         }
-                break;
+    }
 
-                case 5:// Approve Applicant
-                public boolean approveApplicant(String trn) {
-            Applicant applicant = applicants.get(trn);
-            if (applicant != null) {
-            if (applicant.isEligibleForApproval()) {
-                applicant.setStatus("Approved");
-                System.out.println("Applicant with TRN " + trn + " has been approved.");
-                return true;
-            } else {
-                System.out.println("Applicant with TRN " + trn + " does not meet the criteria for approval.");
-                return false;
-                }
-            } else {
-            System.out.println("Applicant with TRN " + trn + " not found.");
-            return false;
-            }
-        }
 
-default: 
- System.out.println("Invalid choice, please try again.");
 
-                    break;                    
-        
-private static void driverMenu(Scanner scanner) {
-    boolean exitDriverMenu = false;
 
-    while (!exitDriverMenu) {
-        // Display options for driver menu
-        System.out.println("\n--- Driver Menu ---");
-        System.out.println("1. View Details");
-        System.out.println("2. Check Tickets");
-        System.out.println("3. Exit Driver Menu");
-
- int driverChoice = scanner.nextInt();
-        scanner.nextLine(); // consume newline
-
-        switch (driverChoice) {
-            case 1: // View Driver Details
-                // Assuming you have the TRN and other details, instantiate a Driver
-                System.out.println("Enter your TRN:");
-                String trn = scanner.nextLine();
-                System.out.println("Enter your name:");
-                String name = scanner.nextLine();
-                System.out.println("Enter your license number:");
-                String licenseNumber = scanner.nextLine();
+}
