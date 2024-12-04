@@ -128,6 +128,22 @@ public class main {
                     System.out.println("Invalid choice. Please try again.");
             }
         }
+
+     public void driverMenu(Scanner scanner) {
+        boolean exitOfficerMenu = false;
+        System.out.println("Driver Menu: ");
+        System.out.println("Please enter your TRN (Taxpayer Registration Number):");
+        String trn = scanner.nextLine();
+
+        while (!exit) {
+            System.out.println("\nDriver Menu:");
+            System.out.println("Please select one of the following options (1-6):");
+            System.out.println("1. Check all past tickets");
+            System.out.println("2. Make an online payment for tickets");
+            System.out.println("3. Check past-due tickets");
+            System.out.println("4. View ticket payments that have not passed due");
+            System.out.println("5. Check for warrant issued for your arrest");
+            System.out.println("6. Exit");
     }
 
 
