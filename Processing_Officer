@@ -62,7 +62,8 @@ public class Processing_Officer extends User {
     // View outstanding tickets for a specific parish
     public void viewTicketsByParish(String parish) {
         boolean found = false;
-        System.out.println("\n--- Outstanding Tickets in " + parish + " ---");
+        System.out.println("\n--- Outstanding Tickets in " + parish + " , NOTE: Outstanding tickets must be paid before
+the application is processed---");
 
         for (Ticket ticket : currentTickets) {
             if (ticket != null && ticket.getStatus().equalsIgnoreCase("Unpaid") && 
