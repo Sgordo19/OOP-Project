@@ -19,7 +19,7 @@ public class PoliceRecord {
     /*public void loadTickets() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(tickets.txt))) {
             String line;
             while ((line = reader.readLine()) != null && ticketCount < currentTickets.length) {
                 String[] data = line.split(",");
