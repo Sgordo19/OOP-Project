@@ -143,8 +143,7 @@ public class main {
             System.out.println("3. Check past-due tickets");
             System.out.println("4. View ticket payments that have not passed due");
             System.out.println("5. Check for warrant issued for your arrest");
-            System.out.println("6. Apply");
-            System.out.println("7. Exit");
+            System.out.println("6. Exit");
     }
 
 
