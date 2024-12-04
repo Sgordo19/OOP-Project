@@ -1,3 +1,4 @@
+// Deja
 package Final_Project;
 
 import java.util.Date;
@@ -11,7 +12,7 @@ public class Ticket {
     private String vehiclePlateNumber;
     private Driver driver = null;
     private JCF_Officer officer;
-    private String status; // "Paid" or "Unpaid"
+    private String status; 
     private Date issueDate;
     private Date dueDate;
     private Date courtDate;
@@ -42,8 +43,8 @@ public class Ticket {
     this.offenceDescription = tick.offenceDescription;
     this.fineAmount = tick.fineAmount;
     this.vehiclePlateNumber = tick.vehiclePlateNumber;
-    this.driver = tick.driver;  // Copy the driver reference (this assumes shallow copy; deep copy needed if Driver is mutable)
-    this.officer = tick.officer; // Assuming officer is also a reference object
+    this.driver = tick.driver;  
+    this.officer = tick.officer;
     }
     // Methods
 
@@ -199,9 +200,7 @@ public class Ticket {
         System.out.println("---------------------------");
     }
 
-    // New Methods
-
-    // Method to check if a ticket is outstanding (Unpaid and overdue)
+       // Method to check if a ticket is outstanding (Unpaid and overdue)
     public boolean checkOutstandingTickets() {
         if ("Unpaid".equalsIgnoreCase(status) && dueDate.before(new Date())) {
             System.out.println("Ticket " + ticketNumber + " is outstanding (Unpaid and overdue).");
@@ -225,7 +224,7 @@ public class Ticket {
                                      int dueInDays, String status, Date courtDate) {
         // Calculate due date by adding the specified number of days to the issue date
         Date dueDate = new Date(issueDate.getTime() + (dueInDays * 24L * 60L * 60L * 1000L));
-        // Return a new Ticket with the correct parameters
+   
         return new Ticket(ticketNumber, issueDate, offenceCode, offenceDescription, fineAmount,
                 driver.promptForVehiclePlateNumber(), driver, officer, status, dueDate, courtDate);
     }
