@@ -117,7 +117,9 @@ public class Applicant extends User {
     // Display police record check result
     public static void displayPoliceRecordCheck(Applicant applicant) {
         if (applicant.getNegativePoliceRecords()) {
-            System.out.println("Police Record Check: Denied");
+            System.out.println("Police Record Check: Denied, Application Denied based
+on the disqualification of the proposed driver, you have 5 to 10 business days to provide
+another driver”.);
         } else {
             System.out.println("Police Record Check: Approved");
         }
