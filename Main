@@ -13,7 +13,7 @@ public class main {
         while (!exitSystem) {
             // Display Main Menu
             System.out.println("\n--- Ticket Issuing and Offender Checking System (TIOCS) ---");
-            System.out.println("1. Processing officer Login");
+            System.out.println("1. Processing Officer Login");
             System.out.println("2. Driver Menu");
             System.out.println("3. JCF Officer Menu");
             System.out.println("4. Exit");
